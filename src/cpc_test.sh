@@ -44,5 +44,6 @@ ${CPC} > ${CPC_LOG} 2>&1 &
 # Start iops statistic zpool iostat
 /bin/bash ${ZIOSTAT} ${IOSTAT_LOG} ${NUM}
 
+wait
 # ENDING TEST
 ls -l /ch{0..3}/ > ${SCAN_LOG}

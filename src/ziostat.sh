@@ -4,4 +4,4 @@ NUM=$2
 
 SEC=$((NUM*20))
 
-/sbin/zpool iostat storage{0..3} ${SEC} > ${IOSTAT_LOG} 
+/sbin/zpool iostat storage{0..3} ${SEC} > ${IOSTAT_LOG}
