@@ -1,0 +1,36 @@
+#!/bin/bash
+
+NUM=$1
+POOL="/ch"
+
+FNAME="SCAN-A"
+
+BASE_PATH="/home/bezrukov/HddTest/src/netmap"
+#rtprio 0 ./pkt-cap -i ix1 -r 0 -B 810000 -n 4 -f /zd/
+
+m=100
+END=$(( m+NUM-1 ))
+while :
+ do 
+   echo $m
+
+    rtprio 0 ${BASE_PATH}/pkt-cap-1326 -b 512 -C 2,6 -i ix0 -r 0 -B 20000 -n 6 -f ${POOL}0/CH0-$FNAME$m &
+    rtprio 0 ${BASE_PATH}/pkt-cap-1326 -b 512 -C 4,6 -i ix1 -r 0 -B 20000 -n 6 -f ${POOL}1/CH1-$FNAME$m &
+    rtprio 0 ${BASE_PATH}/pkt-cap-1326 -b 512 -C 8,12 -i ix4 -r 0 -B 20000 -n 6 -f ${POOL}2/CH2-$FNAME$m &
+    rtprio 0 ${BASE_PATH}/pkt-cap-1326 -b 512 -C 10,12 -i ix5 -r 0 -B 20000 -n 6 -f ${POOL}3/CH3-$FNAME$m &
+#    rtprio 0 ./pkt-cap-8238 -b 512 -C 2,4 -i ix2 -r 0 -B 20000 -n 6 -f ${POOL}4/CH2-$FNAME$m &
+#    rtprio 0 ./pkt-cap-8238 -b 512 -C 2,4 -i ix3 -r 0 -B 20000 -n 6 -f ${POOL}5/CH3-$FNAME$m &
+#    rtprio 0 ./pkt-cap-8238 -b 512 -C 10,12 -i ix6 -r 0 -B 20000 -n 6 -f ${POOL}6/CH6-$FNAME$m &
+#    rtprio 0 ./pkt-cap-8238 -b 512 -C 10,12 -i ix7 -r 0 -B 20000 -n 6 -f ${POOL}7/CH7-$FNAME$m &
+
+   wait
+   
+   (( m++ ))
+
+   if (( m > END )) 
+   then
+       echo -e "\n\t\tpkt-cap-1326 Stop, m = $m\n"
+       exit; 
+   fi 
+
+done
