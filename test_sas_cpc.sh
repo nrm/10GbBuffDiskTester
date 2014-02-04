@@ -1,6 +1,6 @@
 #!/bin/bash
 NUM=$1
-BASE_PATH="/home/bezrukov/HddTest"
+BASE_PATH=`pwd`
 
 echo "Check \"\$NUM\" == $NUM"
 if [ $NUM ]

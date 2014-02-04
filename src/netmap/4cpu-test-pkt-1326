@@ -5,7 +5,7 @@ POOL="/ch"
 
 FNAME="SCAN-A"
 
-BASE_PATH="/home/bezrukov/HddTest/src/netmap"
+BASE_PATH="`pwd`/src/netmap"
 #rtprio 0 ./pkt-cap -i ix1 -r 0 -B 810000 -n 4 -f /zd/
 
 m=100

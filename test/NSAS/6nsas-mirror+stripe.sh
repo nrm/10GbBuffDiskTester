@@ -11,6 +11,6 @@ POOL_DISK=6
 POOL_TYPE="mirror+stripe"
 DISK_TYPE="nsas"
 
-BASE_PATH="/home/bezrukov/HddTest/src"
+BASE_PATH="`pwd`/src"
 #Start cpc_test.sh
 /bin/bash ${BASE_PATH}/cpc_test.sh ${NUM} ${POOL_DISK} ${POOL_TYPE} ${DISK_TYPE}

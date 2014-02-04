@@ -8,7 +8,7 @@
 #################################################################
 
 NUM=$1
-BASE_PATH="/home/bezrukov/HddTest/src"
+BASE_PATH="`pwd`/src"
 LOG_PATH=${BASE_PATH}/../Log/DD
 
 POOL_DISK=3

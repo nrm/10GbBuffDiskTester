@@ -6,7 +6,7 @@ POOL_TYPE=$3
 DISK_TYPE=$4
 
 
-BASE_PATH="/home/bezrukov/HddTest/src"
+BASE_PATH="`pwd`/src"
 LOG_PATH=${BASE_PATH}/../Log/CPC/${DISK_TYPE}
 
 CAPTURE=${BASE_PATH}/netmap/4cpu-test-pkt-1326 
