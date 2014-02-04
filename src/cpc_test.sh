@@ -24,7 +24,7 @@ SCAN_LOG=${CWD}/`date +"%H:%Mm"`-Result-${NUM}scan-${POOL_TYPE}-${POOL_DISK}-${D
 
 # Test Init
 
-mkdir ${BASE_PATH}
+#mkdir ${BASE_PATH}
 #mkdir ${LOG_PATH}
 mkdir -p ${CWD}
 
@@ -42,7 +42,7 @@ mkdir -p ${CWD}
 ${CPC} > ${CPC_LOG} 2>&1 &
 
 # Start iops statistic zpool iostat
-${ZIOSTAT} ${IOSTAT_LOG} ${NUM}
+/bin/bash ${ZIOSTAT} ${IOSTAT_LOG} ${NUM}
 
 # ENDING TEST
 ls -l /ch{0..3}/ > ${SCAN_LOG}
