@@ -16,8 +16,8 @@ while :
 
     rtprio 0 ${BASE_PATH}/pkt-cap-1326 -b 512 -C 2,6 -i ix0 -r 0 -B 20000 -n 6 -f ${POOL}0/CH0-$FNAME$m &
     rtprio 0 ${BASE_PATH}/pkt-cap-1326 -b 512 -C 4,6 -i ix1 -r 0 -B 20000 -n 6 -f ${POOL}1/CH1-$FNAME$m &
-    rtprio 0 ${BASE_PATH}/pkt-cap-1326 -b 512 -C 8,12 -i ix4 -r 0 -B 20000 -n 6 -f ${POOL}2/CH2-$FNAME$m &
-    rtprio 0 ${BASE_PATH}/pkt-cap-1326 -b 512 -C 10,12 -i ix5 -r 0 -B 20000 -n 6 -f ${POOL}3/CH3-$FNAME$m &
+    rtprio 0 ${BASE_PATH}/pkt-cap-1326 -b 512 -C 18,22 -i ix6 -r 0 -B 20000 -n 6 -f ${POOL}2/CH2-$FNAME$m &
+    rtprio 0 ${BASE_PATH}/pkt-cap-1326 -b 512 -C 20,22 -i ix7 -r 0 -B 20000 -n 6 -f ${POOL}3/CH3-$FNAME$m &
 #    rtprio 0 ./pkt-cap-8238 -b 512 -C 2,4 -i ix2 -r 0 -B 20000 -n 6 -f ${POOL}4/CH2-$FNAME$m &
 #    rtprio 0 ./pkt-cap-8238 -b 512 -C 2,4 -i ix3 -r 0 -B 20000 -n 6 -f ${POOL}5/CH3-$FNAME$m &
 #    rtprio 0 ./pkt-cap-8238 -b 512 -C 10,12 -i ix6 -r 0 -B 20000 -n 6 -f ${POOL}6/CH6-$FNAME$m &

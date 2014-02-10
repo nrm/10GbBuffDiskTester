@@ -2,6 +2,12 @@
 NUM=$1
 BASE_PATH=`pwd`
 echo "Check \"\$NUM\""
+
+/usr/bin/cpuset -l 2 -x 269
+/usr/bin/cpuset -l 4 -x 271
+/usr/bin/cpuset -l 18 -x 282
+/usr/bin/cpuset -l 20 -x 284
+
 if [ $NUM ]
 then
   echo "Start DD 2ssd-stripe.sh with ${NUM} scans"
@@ -49,3 +55,18 @@ else
   echo "Укажите количество сканов"
   exit 1
 fi
+
+#      irq269: ix0
+#      irq271: ix1
+#      irq273: ix2
+#      irq275: ix3
+#      irq278: ix4
+#      irq280: ix5
+#      irq282: ix6
+#      irq284: ix7
+
+#    /usr/bin/cpuset -l 2 -x 269
+#    /usr/bin/cpuset -l 4 -x 271
+#    /usr/bin/cpuset -l 18 -x 282
+#    /usr/bin/cpuset -l 20 -x 284
+
