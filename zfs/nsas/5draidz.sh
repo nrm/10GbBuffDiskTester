@@ -4,29 +4,11 @@
 # Name_file: 4Ch-5draidz.sh                                     #
 #################################################################
 
-# check pool status before destroy pools
-echo -e "\n\t\tcheck pool status before destroy pools\n"
-/sbin/zpool list
-echo -e "\n"
-zpool status
-echo -e "\n"
-df -h
-echo -e "\n"
-
 # delete zpool
 /sbin/zpool destroy storage0
 /sbin/zpool destroy storage1
 /sbin/zpool destroy storage2
 /sbin/zpool destroy storage3
-
-# check pool status after destroy pools
-echo -e "\n\t\tcheck pool status after destroy pools\n"
-/sbin/zpool list
-echo -e "\n"
-zpool status
-echo -e "\n"
-df -h
-echo -e "\n"
 
 # create zpool RAIDZ 5 disk
 /sbin/zpool create storage0 raidz /dev/gpt/disk0 /dev/gpt/disk1 /dev/gpt/disk2 /dev/gpt/disk3 /dev/gpt/disk4
@@ -44,8 +26,3 @@ echo -e "\n"
 echo -e "\n\t\tcheck pool status after create pools\n"
 /sbin/zpool list
 echo -e "\n"
-zpool status
-echo -e "\n"
-df -h
-echo -e "\n"
-

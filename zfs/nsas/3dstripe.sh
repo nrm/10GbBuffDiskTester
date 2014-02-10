@@ -4,29 +4,37 @@
 # Name_file: 4Ch-3dstripe.sh                                    #
 #################################################################
 
-# check pool status before destroy pools
-echo -e "\n\t\tcheck pool status before destroy pools\n"
-/sbin/zpool list
-echo -e "\n"
-zpool status
-echo -e "\n"
-df -h
-echo -e "\n"
+
+#disk0
+#disk1
+#disk10
+#disk11
+#disk12
+#disk13
+#disk14
+#disk15
+#disk16
+#disk17
+#disk18
+#disk19
+#disk2
+#disk20
+#disk21
+#disk22
+#disk23
+#disk3
+#disk4
+#disk5
+#disk6
+#disk7
+#disk8
+#disk9
 
 # delete zpool
 /sbin/zpool destroy storage0
 /sbin/zpool destroy storage1
 /sbin/zpool destroy storage2
 /sbin/zpool destroy storage3
-
-# check pool status after destroy pools
-echo -e "\n\t\tcheck pool status after destroy pools\n"
-/sbin/zpool list
-echo -e "\n"
-zpool status
-echo -e "\n"
-df -h
-echo -e "\n"
 
 # create zpool STRIPE 3 disk
 /sbin/zpool create storage0 /dev/gpt/disk0 /dev/gpt/disk1 /dev/gpt/disk2
@@ -43,8 +51,4 @@ echo -e "\n"
 # check pool status after create pools
 echo -e "\n\t\tcheck pool status after create pools\n"
 /sbin/zpool list
-echo -e "\n"
-zpool status
-echo -e "\n"
-df -h
 echo -e "\n"
