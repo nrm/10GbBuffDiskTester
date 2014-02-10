@@ -4,6 +4,8 @@ NUM=$1
 POOL_DISK=$2
 POOL_TYPE=$3
 DISK_TYPE=$4
+BASE_PATH=$5
+IFPOOL=$6
 
 
 BASE_PATH="`pwd`/src"
@@ -29,7 +31,12 @@ SCAN_LOG=${CWD}/`date +"%H:%Mm"`-Result-${NUM}scan-${POOL_TYPE}-${POOL_DISK}-${D
 mkdir -p ${CWD}
 
 # Destroy and Create zpool
-/bin/bash ${ZPOOL}
+if (( IFPOOL == 1))
+then
+    /bin/bash ${ZPOOL}
+else
+    echo "reuse zpool"
+fi
 
 # Start pkt-cap
 /bin/bash ${CAPTURE} ${NUM} > ${PKT_LOG} 2>&1 &

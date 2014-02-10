@@ -5,6 +5,7 @@ POOL_DISK=$2
 POOL_TYPE=$3
 DISK_TYPE=$4
 BASE_PATH=$5
+IFPOOL=$6
 
 
 DD=${BASE_PATH}/dd_tester.sh
@@ -25,7 +26,12 @@ SCAN_LOG=${CWD}/`date +"%H:%Mm"`-Result-${NUM}scan-${POOL_TYPE}-${POOL_DISK}-${D
 mkdir -p ${CWD}
 
 # Create zpool
-/bin/bash ${ZPOOL}
+if (( IFPOOL == 1))
+then
+    /bin/bash ${ZPOOL}
+else
+    echo "reuse zpool"
+fi
 
 # Start dd
 /bin/bash ${DD} ${DD_LOG} ${NUM}
