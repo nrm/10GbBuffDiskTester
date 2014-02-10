@@ -8,9 +8,9 @@
 #################################################################
 
 NUM=$1
-POOL_DISK=3
-POOL_TYPE="stripe"
-DISK_TYPE="nsas"
+POOL_DISK=5
+POOL_TYPE="raidz"
+DISK_TYPE="ssd"
 
 BASE_PATH="`pwd`/src"
 

@@ -10,7 +10,7 @@
 NUM=$1
 POOL_DISK=3
 POOL_TYPE="stripe"
-DISK_TYPE="nsas"
+DISK_TYPE="ssd"
 
 BASE_PATH="`pwd`/src"
 

@@ -8,9 +8,9 @@
 #################################################################
 
 NUM=$1
-POOL_DISK=3
-POOL_TYPE="stripe"
-DISK_TYPE="nsas"
+POOL_DISK=6
+POOL_TYPE="mirror+stripe"
+DISK_TYPE="ssd"
 
 BASE_PATH="`pwd`/src"
 
