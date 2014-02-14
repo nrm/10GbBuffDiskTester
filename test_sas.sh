@@ -40,15 +40,15 @@ then
   #echo "Start CPC 5sas-raidz.sh with ${NUM} scans"
   #bash ${BASE_PATH}/test/SAS/5sas-raidz.sh ${NUM} 0
   
-  sleep 60
-  echo "Start 6sas-raidz+stripe.sh with ${NUM} scans"
-  bash ${BASE_PATH}/test_dd/SAS/6sas-raidz+stripe.sh ${NUM} 1
-  #echo "Start CPC 6sas-raidz+stripe.sh with ${NUM} scans"
-  #bash ${BASE_PATH}/test_dd/SAS/6sas-raidz+stripe.sh ${NUM} 0
-  
-  sleep 60
-  echo "Start 6sas-mirror+stripe.sh with ${NUM} scans"
-  bash ${BASE_PATH}/test_dd/SAS/6sas-mirror+stripe.sh ${NUM} 1
+  #sleep 60
+  #echo "Start 6sas-raidz+stripe.sh with ${NUM} scans"
+  #bash ${BASE_PATH}/test_dd/SAS/6sas-raidz+stripe.sh ${NUM} 1
+  ##echo "Start CPC 6sas-raidz+stripe.sh with ${NUM} scans"
+  ##bash ${BASE_PATH}/test_dd/SAS/6sas-raidz+stripe.sh ${NUM} 0
+  #
+  #sleep 60
+  #echo "Start 6sas-mirror+stripe.sh with ${NUM} scans"
+  #bash ${BASE_PATH}/test_dd/SAS/6sas-mirror+stripe.sh ${NUM} 1
   #echo "Start CPC 6sas-mirror+stripe.sh with ${NUM} scans"
   #bash ${BASE_PATH}/test_dd/SAS/6sas-mirror+stripe.sh ${NUM} 0
 else

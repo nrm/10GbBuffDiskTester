@@ -4,4 +4,7 @@ NUM=$2
 
 SEC=$((NUM*24))
 
-/sbin/zpool iostat storage{0..3} 3 ${SEC} > ${LOG}
+for i in {0..7}
+do
+    /sbin/zpool iostat storage${i} 10 ${SEC} > ${LOG}_ch${i}
+done
