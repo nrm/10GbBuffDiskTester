@@ -40,8 +40,9 @@ fi
 /bin/bash ${TOP} ${TOP_LOG} ${NUM}
 
 # Start iops statistic zpool iostat
-SEC=$((${NUM}*(40+20)/3))
-zpool iostat 3 ${SEC} > ${IOSTAT_LOG}
+#SEC=$((${NUM}*(40+20)/3))
+#zpool iostat 10 ${SEC} > ${IOSTAT_LOG}
+/bin/bash ${ZIOSTAT} ${IOSTAT_LOG} ${NUM}
 
 # ENDING TEST
 ls -l /ch?/* > ${SCAN_LOG}
