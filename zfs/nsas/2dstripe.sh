@@ -19,7 +19,7 @@ done
 /sbin/zpool create storage4 /dev/gpt/disk8 /dev/gpt/disk9
 /sbin/zpool create storage5 /dev/gpt/disk10 /dev/gpt/disk11
 /sbin/zpool create storage6 /dev/gpt/disk12 /dev/gpt/disk13
-/sbin/zpool create storage7 /dev/gpt/disk14 /dev/gpt/disk115
+/sbin/zpool create storage7 /dev/gpt/disk14 /dev/gpt/disk15
 
 # create mountpoint
 for i in {0..7}
