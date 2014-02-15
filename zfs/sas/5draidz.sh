@@ -18,8 +18,8 @@ done
 
 /sbin/zpool create storage4 raidz /dev/gpt/md1d0 /dev/gpt/md1d1 /dev/gpt/md1d2 /dev/gpt/md1d3 /dev/gpt/md1d4
 /sbin/zpool create storage5 raidz /dev/gpt/md1d5 /dev/gpt/md1d6 /dev/gpt/md1d7 /dev/gpt/md1d8 /dev/gpt/md1d9
-/sbin/zpool create storage6 raidz /dev/gpt/md1d10 /dev/gpt/md1d11 /dev/gpt/md2d12 /dev/gpt/md1d13 /dev/gpt/md1d14
-/sbin/zpool create storage7 raidz /dev/gpt/md1d15 /dev/gpt/md1d16 /dev/gpt/md2d17 /dev/gpt/md1d18 /dev/gpt/md1d19
+/sbin/zpool create storage6 raidz /dev/gpt/md1d10 /dev/gpt/md1d11 /dev/gpt/md1d12 /dev/gpt/md1d13 /dev/gpt/md1d14
+/sbin/zpool create storage7 raidz /dev/gpt/md1d15 /dev/gpt/md1d16 /dev/gpt/md1d17 /dev/gpt/md1d18 /dev/gpt/md1d19
 
 # create mountpoint
 for i in {0..7}
