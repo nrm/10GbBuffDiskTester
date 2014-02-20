@@ -37,15 +37,15 @@ done
 #md2d23
 
 # create zpool STRIPE 3 disk
-/sbin/zpool create storage0 /dev/gpt/md2d23 /dev/gpt/md2d22
-/sbin/zpool create storage1 /dev/gpt/md2d21 /dev/gpt/md2d20
-/sbin/zpool create storage2 /dev/gpt/md2d19 /dev/gpt/md2d18
-/sbin/zpool create storage3 /dev/gpt/md2d17 /dev/gpt/md2d16
+/sbin/zpool create -f storage0 /dev/gpt/md2d23 /dev/gpt/md2d22
+/sbin/zpool create -f storage1 /dev/gpt/md2d21 /dev/gpt/md2d20
+/sbin/zpool create -f storage2 /dev/gpt/md2d19 /dev/gpt/md2d18
+/sbin/zpool create -f storage3 /dev/gpt/md2d17 /dev/gpt/md2d16
 
-/sbin/zpool create storage4 /dev/gpt/md1d23 /dev/gpt/md1d22
-/sbin/zpool create storage5 /dev/gpt/md1d21 /dev/gpt/md1d20
-/sbin/zpool create storage6 /dev/gpt/md1d19 /dev/gpt/md1d18
-/sbin/zpool create storage7 /dev/gpt/md1d17 /dev/gpt/md1d16
+/sbin/zpool create -f storage4 /dev/gpt/md1d23 /dev/gpt/md1d22
+/sbin/zpool create -f storage5 /dev/gpt/md1d21 /dev/gpt/md1d20
+/sbin/zpool create -f storage6 /dev/gpt/md1d19 /dev/gpt/md1d18
+/sbin/zpool create -f storage7 /dev/gpt/md1d17 /dev/gpt/md1d16
 
 # create mountpoint
 for i in {0..7}
