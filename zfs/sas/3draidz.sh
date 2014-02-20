@@ -31,5 +31,5 @@ done
 echo -e "\n\t\tcheck pool status after create pools\n"
 /sbin/zpool list
 echo -e "\n\t\tcheck pool status after create pools\n"
-/sbin/zpool status storage7
+/sbin/zpool status
 echo -e "\n"
