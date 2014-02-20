@@ -5,10 +5,10 @@
 #################################################################
 
 # delete zpool
-/sbin/zpool destroy storage0
-/sbin/zpool destroy storage1
-/sbin/zpool destroy storage2
-/sbin/zpool destroy storage3
+for i in {0..7}
+do
+    /sbin/zpool destroy storage$i
+done
 
 # create zpool RAIDZ 3 disk
 /sbin/zpool create storage0 raidz /dev/da90 /dev/da91 /dev/da92
@@ -17,10 +17,10 @@
 /sbin/zpool create storage3 raidz /dev/da99 /dev/da910 /dev/da911
 
 # create mountpoint
-/sbin/zfs create -o mountpoint=/ch0 -o atime=off storage0/s0;
-/sbin/zfs create -o mountpoint=/ch1 -o atime=off storage1/s0;
-/sbin/zfs create -o mountpoint=/ch2 -o atime=off storage2/s0;
-/sbin/zfs create -o mountpoint=/ch3 -o atime=off storage3/s0;
+for i in {0..7}
+do
+    /sbin/zfs create -o mountpoint=/ch$i -o atime=off storage${i}/s0;
+done
 
 # check pool status after create pools
 echo -e "\n\t\tcheck pool status after create pools\n"
