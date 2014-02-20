@@ -34,15 +34,16 @@ else
 fi
 
 # Start dd
-/bin/bash ${DD} ${DD_LOG} ${NUM}
+/bin/bash ${DD} ${DD_LOG} ${NUM} &
 
 # Start write top cpu statistic to log file
 /bin/bash ${TOP} ${TOP_LOG} ${NUM}
 
 # Start iops statistic zpool iostat
-SEC=$((${NUM}*(40+20)/3))
-zpool iostat 3 ${SEC} > ${IOSTAT_LOG}
-#/bin/bash ${ZIOSTAT} ${IOSTAT_LOG} ${NUM}
+#SEC=$((${NUM}*(40+20)/3))
+#zpool iostat 3 ${SEC} > ${IOSTAT_LOG}
+/bin/bash ${ZIOSTAT} ${IOSTAT_LOG} ${NUM}
 
 # ENDING TEST
+wait
 ls -l /ch?/* > ${SCAN_LOG}
