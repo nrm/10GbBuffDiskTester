@@ -7,8 +7,9 @@ RAND=/old/root/rand.data.0
 for i in 0 1 2; do dd if=${RAND} of=/dev/null bs=128K; done
 
 END=$(( 100+${NUM} ))
-for ind in {0..$END}
+for ind in {0..END}
 do
+    echo "Step $ind"
     dd if=${RAND} of=/ch0/test_dd_${ind} bs=1m >> ${LOG}_ch0 2>&1 &
     dd if=${RAND} of=/ch1/test_dd_${ind} bs=1m >> ${LOG}_ch1 2>&1 &
     dd if=${RAND} of=/ch2/test_dd_${ind} bs=1m >> ${LOG}_ch2 2>&1 &
