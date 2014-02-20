@@ -6,8 +6,9 @@ RAND=/old/root/rand.data.0
 
 for i in 0 1 2; do dd if=${RAND} of=/dev/null bs=128K; done
 
-END=$(( 100+${NUM} ))
-for ((ind=1; ind<=$END; ind++))
+START=100
+END=$(( ${START}+${NUM} ))
+for ((ind=$START; ind<=$END; ind++))
 do
     #echo "Step $ind" # For debug test funstion "wait"
     dd if=${RAND} of=/ch0/test_dd_${ind} bs=1m >> ${LOG}_ch0 2>&1 &
