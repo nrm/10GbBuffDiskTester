@@ -34,9 +34,13 @@ then
   #echo "Start CPC 3sata-raidz.sh with ${NUM} scans"
   #bash ${BASE_PATH}/test/SATA/3sata-raidz.sh ${NUM} 0
 
-  #sleep 60
-  #echo "Start 5sata-raidz.sh with ${NUM} scans"
-  #bash ${BASE_PATH}/test_dd/SATA/5sata-raidz.sh ${NUM} 1
+  sleep 60
+  echo "Start 4sata-raidz.sh with ${NUM} scans"
+  bash ${BASE_PATH}/test_dd/SATA/4sata-raidz.sh ${NUM} 1
+
+  sleep 60
+  echo "Start 5sata-raidz.sh with ${NUM} scans"
+  bash ${BASE_PATH}/test_dd/SATA/5sata-raidz.sh ${NUM} 1
   ##echo "Start CPC 5sata-raidz.sh with ${NUM} scans"
   ##bash ${BASE_PATH}/test/SATA/5sata-raidz.sh ${NUM} 0
   #
