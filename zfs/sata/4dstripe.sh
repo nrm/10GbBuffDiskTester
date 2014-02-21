@@ -5,24 +5,31 @@
 #################################################################
 
 # delete zpool
-/sbin/zpool destroy storage0
-/sbin/zpool destroy storage1
-/sbin/zpool destroy storage2
-/sbin/zpool destroy storage3
-
+for i in {0..7}
+do
+    /sbin/zpool destroy storage$i
+done
 
 # create zpool STRIPE 4 disk
-/sbin/zpool create storage0 /dev/da90 /dev/da91 /dev/da92 /dev/da93
-/sbin/zpool create storage1 /dev/da94 /dev/da95 /dev/da96 /dev/da97
-/sbin/zpool create storage2 /dev/da98 /dev/da99 /dev/da88 /dev/da89
-/sbin/zpool create storage3 /dev/da100 /dev/da101 /dev/da102 /dev/da103
+/sbin/zpool create -f storage0 /dev/gpt/sata1d0 /dev/gpt/sata1d1 /dev/gpt/sata1d2 /dev/gpt/sata1d3
+/sbin/zpool create -f storage1 /dev/gpt/sata1d4 /dev/gpt/sata1d5 /dev/gpt/sata1d6 /dev/gpt/sata1d7
+/sbin/zpool create -f storage2 /dev/gpt/sata1d8 /dev/gpt/sata1d9 /dev/gpt/sata1d10 /dev/gpt/sata1d11
+/sbin/zpool create -f storage3 /dev/gpt/sata1d12 /dev/gpt/sata1d13 /dev/gpt/sata1d14 /dev/gpt/sata1d15
+
+/sbin/zpool create -f storage4 /dev/gpt/sata2d0 /dev/gpt/sata2d1 /dev/gpt/sata2d2 /dev/gpt/sata2d3
+/sbin/zpool create -f storage5 /dev/gpt/sata2d4 /dev/gpt/sata2d5 /dev/gpt/sata2d6 /dev/gpt/sata2d7
+/sbin/zpool create -f storage6 /dev/gpt/sata2d8 /dev/gpt/sata2d9 /dev/gpt/sata2d10 /dev/gpt/sata2d11
+/sbin/zpool create -f storage7 /dev/gpt/sata2d12 /dev/gpt/sata2d13 /dev/gpt/sata2d14 /dev/gpt/sata2d15
 
 # create mountpoint
-/sbin/zfs create -o mountpoint=/ch0 -o atime=off storage0/s0;
-/sbin/zfs create -o mountpoint=/ch1 -o atime=off storage1/s0;
-/sbin/zfs create -o mountpoint=/ch2 -o atime=off storage2/s0;
-/sbin/zfs create -o mountpoint=/ch3 -o atime=off storage3/s0;
+for i in {0..7}
+do
+    /sbin/zfs create -o mountpoint=/ch$i -o atime=off storage${i}/s0;
+done
 
 # check pool status after create pools
 echo -e "\n\t\tcheck pool status after create pools\n"
 /sbin/zpool list
+echo -e "\n\t\tcheck pool status after create pools\n"
+/sbin/zpool status
+echo -e "\n"

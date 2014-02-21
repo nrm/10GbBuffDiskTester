@@ -11,10 +11,15 @@ do
 done
 
 # create zpool RAIDZ 3 disk
-/sbin/zpool create storage0 raidz /dev/da90 /dev/da91 /dev/da92
-/sbin/zpool create storage1 raidz  /dev/da93 /dev/da94 /dev/da95
-/sbin/zpool create storage2 raidz /dev/da96 /dev/da97 /dev/da98
-/sbin/zpool create storage3 raidz /dev/da99 /dev/da910 /dev/da911
+/sbin/zpool create -f storage0 raidz /dev/gpt/sata1d0 /dev/gpt/sata1d1 /dev/gpt/sata1d2
+/sbin/zpool create -f storage1 raidz /dev/gpt/sata1d3 /dev/gpt/sata1d4 /dev/gpt/sata1d5
+/sbin/zpool create -f storage2 raidz /dev/gpt/sata1d6 /dev/gpt/sata1d7 /dev/gpt/sata1d8
+/sbin/zpool create -f storage3 raidz /dev/gpt/sata1d9 /dev/gpt/sata1d10 /dev/gpt/sata1d11
+
+/sbin/zpool create -f storage4 raidz /dev/gpt/sata2d0 /dev/gpt/sata2d1 /dev/gpt/sata2d2
+/sbin/zpool create -f storage5 raidz /dev/gpt/sata2d3 /dev/gpt/sata2d4 /dev/gpt/sata2d5
+/sbin/zpool create -f storage6 raidz /dev/gpt/sata2d6 /dev/gpt/sata2d7 /dev/gpt/sata2d8
+/sbin/zpool create -f storage7 raidz /dev/gpt/sata2d9 /dev/gpt/sata2d10 /dev/gpt/sata2d11
 
 # create mountpoint
 for i in {0..7}
@@ -25,3 +30,6 @@ done
 # check pool status after create pools
 echo -e "\n\t\tcheck pool status after create pools\n"
 /sbin/zpool list
+echo -e "\n\t\tcheck pool status after create pools\n"
+/sbin/zpool status
+echo -e "\n"
