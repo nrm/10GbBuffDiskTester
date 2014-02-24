@@ -39,15 +39,15 @@ done
 #ssd2d11
 
 # create zpool STRIPE 3 disk
-/sbin/zpool create -f storage0 /dev/gpt/ssd1d11 /dev/gpt/ssd1d10 /dev/gpt/ssd1d9
-/sbin/zpool create -f storage1 /dev/gpt/ssd1d8 /dev/gpt/ssd1d7 /dev/gpt/ssd1d6
-/sbin/zpool create -f storage2 /dev/gpt/ssd1d5 /dev/gpt/ssd1d4 /dev/gpt/ssd1d3
-/sbin/zpool create -f storage3 /dev/gpt/ssd1d2 /dev/gpt/ssd1d1 /dev/gpt/ssd1d0
+/sbin/zpool create -f storage0 raidz /dev/gpt/ssd1d11 /dev/gpt/ssd1d10 /dev/gpt/ssd1d9 /dev/gpt/ssd1d8
+/sbin/zpool create -f storage1 raidz /dev/gpt/ssd1d7 /dev/gpt/ssd1d6 /dev/gpt/ssd1d5 /dev/gpt/ssd1d4
+/sbin/zpool create -f storage2 raidz /dev/gpt/ssd1d3 /dev/gpt/ssd1d2 /dev/gpt/ssd1d1 /dev/gpt/ssd1d0
+/sbin/zpool create -f storage3 raidz /dev/gpt/disk23 /dev/gpt/disk22 /dev/gpt/disk21 /dev/gpt/disk20
 
-/sbin/zpool create -f storage4 /dev/gpt/ssd2d11 /dev/gpt/ssd2d10 /dev/gpt/ssd2d9
-/sbin/zpool create -f storage5 /dev/gpt/ssd2d8 /dev/gpt/ssd2d7 /dev/gpt/ssd2d6
-/sbin/zpool create -f storage6 /dev/gpt/ssd2d5 /dev/gpt/ssd2d4 /dev/gpt/ssd2d3
-/sbin/zpool create -f storage7 /dev/gpt/ssd2d2 /dev/gpt/ssd2d1 /dev/gpt/ssd2d0
+/sbin/zpool create -f storage4 raidz /dev/gpt/ssd2d11 /dev/gpt/ssd2d10 /dev/gpt/ssd2d9 /dev/gpt/ssd2d8
+/sbin/zpool create -f storage5 raidz /dev/gpt/ssd2d5 /dev/gpt/ssd2d7 /dev/gpt/ssd2d6 /dev/gpt/ssd2d4
+/sbin/zpool create -f storage6 raidz /dev/gpt/ssd2d3 /dev/gpt/ssd2d2 /dev/gpt/ssd2d1 /dev/gpt/ssd2d0
+/sbin/zpool create -f storage7 raidz /dev/gpt/disk19 /dev/gpt/disk18 /dev/gpt/disk17 /dev/gpt/disk16
 
 # create mountpoint
 for i in {0..7}

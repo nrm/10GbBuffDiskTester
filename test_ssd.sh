@@ -12,45 +12,49 @@ if [ $NUM ]
 then
   echo "Start DD 2ssd-stripe.sh with ${NUM} scans"
   bash ${BASE_PATH}/test_dd/SSD/2ssd-stripe.sh ${NUM} 1
-  echo "Start CPC 2ssd-stripe.sh with ${NUM} scans"
-  bash ${BASE_PATH}/test/SSD/2ssd-stripe.sh ${NUM} 0
+  #echo "Start CPC 2ssd-stripe.sh with ${NUM} scans"
+  #bash ${BASE_PATH}/test/SSD/2ssd-stripe.sh ${NUM} 0
   
   sleep 60
   echo "Start DD 3ssd-stripe.sh with ${NUM} scans"
   bash ${BASE_PATH}/test_dd/SSD/3ssd-stripe.sh ${NUM} 1
-  echo "Start CPC 3ssd-stripe.sh with ${NUM} scans"
-  bash ${BASE_PATH}/test/SSD/3ssd-stripe.sh ${NUM} 0
+  #echo "Start CPC 3ssd-stripe.sh with ${NUM} scans"
+  #bash ${BASE_PATH}/test/SSD/3ssd-stripe.sh ${NUM} 0
   
 
   sleep 60
   echo "Start 4ssd-stripe.sh with ${NUM} scans"
   bash ${BASE_PATH}/test_dd/SSD/4ssd-stripe.sh ${NUM} 1
-  echo "Start CPC 4ssd-stripe.sh with ${NUM} scans"
-  bash ${BASE_PATH}/test/SSD/4ssd-stripe.sh ${NUM} 0
+  #echo "Start CPC 4ssd-stripe.sh with ${NUM} scans"
+  #bash ${BASE_PATH}/test/SSD/4ssd-stripe.sh ${NUM} 0
   
   sleep 60
   echo "Start 3ssd-raidz.sh with ${NUM} scans"
   bash ${BASE_PATH}/test_dd/SSD/3ssd-raidz.sh ${NUM} 1
-  echo "Start CPC 3ssd-raidz.sh with ${NUM} scans"
-  bash ${BASE_PATH}/test/SSD/3ssd-raidz.sh ${NUM} 0
+  #echo "Start CPC 3ssd-raidz.sh with ${NUM} scans"
+  #bash ${BASE_PATH}/test/SSD/3ssd-raidz.sh ${NUM} 0
+
+  sleep 60
+  echo "Start 4ssd-raidz.sh with ${NUM} scans"
+  bash ${BASE_PATH}/test_dd/SSD/4ssd-raidz.sh ${NUM} 1
 
   sleep 60
   echo "Start 5ssd-raidz.sh with ${NUM} scans"
   bash ${BASE_PATH}/test_dd/SSD/5ssd-raidz.sh ${NUM} 1
-  echo "Start CPC 5ssd-raidz.sh with ${NUM} scans"
-  bash ${BASE_PATH}/test/SSD/5ssd-raidz.sh ${NUM} 0
-  
-  sleep 60
-  echo "Start 6ssd-raidz+stripe.sh with ${NUM} scans"
-  bash ${BASE_PATH}/test_dd/SSD/6ssd-raidz+stripe.sh ${NUM} 1
-  echo "Start CPC 6ssd-raidz+stripe.sh with ${NUM} scans"
-  bash ${BASE_PATH}/test_dd/SSD/6ssd-raidz+stripe.sh ${NUM} 0
-  
-  sleep 60
-  echo "Start 6ssd-mirror+stripe.sh with ${NUM} scans"
-  bash ${BASE_PATH}/test_dd/SSD/6ssd-mirror+stripe.sh ${NUM} 1
-  echo "Start CPC 6ssd-mirror+stripe.sh with ${NUM} scans"
-  bash ${BASE_PATH}/test_dd/SSD/6ssd-mirror+stripe.sh ${NUM} 0
+  #echo "Start CPC 5ssd-raidz.sh with ${NUM} scans"
+  #bash ${BASE_PATH}/test/SSD/5ssd-raidz.sh ${NUM} 0
+  #
+  #sleep 60
+  #echo "Start 6ssd-raidz+stripe.sh with ${NUM} scans"
+  #bash ${BASE_PATH}/test_dd/SSD/6ssd-raidz+stripe.sh ${NUM} 1
+  #echo "Start CPC 6ssd-raidz+stripe.sh with ${NUM} scans"
+  #bash ${BASE_PATH}/test_dd/SSD/6ssd-raidz+stripe.sh ${NUM} 0
+  #
+  #sleep 60
+  #echo "Start 6ssd-mirror+stripe.sh with ${NUM} scans"
+  #bash ${BASE_PATH}/test_dd/SSD/6ssd-mirror+stripe.sh ${NUM} 1
+  #echo "Start CPC 6ssd-mirror+stripe.sh with ${NUM} scans"
+  #bash ${BASE_PATH}/test_dd/SSD/6ssd-mirror+stripe.sh ${NUM} 0
 else
   echo "Укажите количество сканов"
   exit 1
