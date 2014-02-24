@@ -1,27 +1,63 @@
 #!/bin/bash
 #################################################################
 # Удаляем сущ zpool и создаем новый                             #
-# Name_file: 4Ch-3draidz.sh                                     #
+# Name_file: 3dstripe.sh                                        #
 #################################################################
 
 # delete zpool
-/sbin/zpool destroy storage0
-/sbin/zpool destroy storage1
-/sbin/zpool destroy storage2
-/sbin/zpool destroy storage3
+for i in {0..7}
+do
+    /sbin/zpool destroy storage$i
+done
 
-# create zpool RAIDZ 3 disk
-/sbin/zpool create storage0 raidz /dev/gpt/ssd0 /dev/gpt/ssd1 /dev/gpt/ssd2
-/sbin/zpool create storage1 raidz  /dev/gpt/ssd3 /dev/gpt/ssd4 /dev/gpt/ssd5
-/sbin/zpool create storage2 raidz /dev/gpt/ssd6 /dev/gpt/ssd7 /dev/gpt/ssd8
-/sbin/zpool create storage3 raidz /dev/gpt/ssd9 /dev/gpt/ssd10 /dev/gpt/ssd11
+#MD1
+#ssd1d0
+#ssd1d1
+#ssd1d2
+#ssd1d3
+#ssd1d4
+#ssd1d5
+#ssd1d6
+#ssd1d7
+#ssd1d8
+#ssd1d9
+#ssd1d10
+#ssd1d11
+#
+#MD2
+#ssd2d0
+#ssd2d1
+#ssd2d2
+#ssd2d3
+#ssd2d4
+#ssd2d5
+#ssd2d6
+#ssd2d7
+#ssd2d8
+#ssd2d9
+#ssd2d10
+#ssd2d11
+
+# create zpool STRIPE 3 disk
+/sbin/zpool create -f storage0 raidz /dev/gpt/ssd1d0 /dev/gpt/ssd1d1 /dev/gpt/ssd1d2
+/sbin/zpool create -f storage1 raidz /dev/gpt/ssd1d3 /dev/gpt/ssd1d4 /dev/gpt/ssd1d5
+/sbin/zpool create -f storage2 raidz /dev/gpt/ssd1d6 /dev/gpt/ssd1d7 /dev/gpt/ssd1d8
+/sbin/zpool create -f storage3 raidz /dev/gpt/ssd1d9 /dev/gpt/ssd1d10 /dev/gpt/ssd1d11
+
+/sbin/zpool create -f storage4 raidz /dev/gpt/ssd2d0 /dev/gpt/ssd2d1 /dev/gpt/ssd2d2
+/sbin/zpool create -f storage5 raidz /dev/gpt/ssd2d3 /dev/gpt/ssd2d4 /dev/gpt/ssd2d5
+/sbin/zpool create -f storage6 raidz /dev/gpt/ssd2d6 /dev/gpt/ssd2d7 /dev/gpt/ssd2d8
+/sbin/zpool create -f storage7 raidz /dev/gpt/ssd2d9 /dev/gpt/ssd2d10 /dev/gpt/ssd2d11
 
 # create mountpoint
-/sbin/zfs create -o mountpoint=/ch0 -o atime=off storage0/s0;
-/sbin/zfs create -o mountpoint=/ch1 -o atime=off storage1/s0;
-/sbin/zfs create -o mountpoint=/ch2 -o atime=off storage2/s0;
-/sbin/zfs create -o mountpoint=/ch3 -o atime=off storage3/s0;
+for i in {0..7}
+do
+    /sbin/zfs create -o mountpoint=/ch$i -o atime=off storage${i}/s0;
+done
 
 # check pool status after create pools
 echo -e "\n\t\tcheck pool status after create pools\n"
 /sbin/zpool list
+echo -e "\n\t\tcheck pool status after create pools\n"
+/sbin/zpool status
+echo -e "\n"
