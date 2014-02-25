@@ -34,8 +34,12 @@ then
   #echo "Start CPC 3nsas-raidz.sh with ${NUM} scans"
   #bash ${BASE_PATH}/test/NSAS/3nsas-raidz.sh ${NUM} 0
 
-  #sleep 60
-  #echo "Start 5nsas-raidz.sh with ${NUM} scans"
+  sleep 60
+  echo "Start 4nsas-raidz.sh with ${NUM} scans"
+  bash ${BASE_PATH}/test_dd/NSAS/4nsas-raidz.sh ${NUM} 1
+
+  sleep 60
+  echo "Start 5nsas-raidz.sh with ${NUM} scans"
   bash ${BASE_PATH}/test_dd/NSAS/5nsas-raidz.sh ${NUM} 1
   #echo "Start CPC 5nsas-raidz.sh with ${NUM} scans"
   #bash ${BASE_PATH}/test/NSAS/5nsas-raidz.sh ${NUM} 0
