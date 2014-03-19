@@ -78,8 +78,8 @@ def args():
 
 if __name__ == "__main__":
     #args()
-    cProfile.run('get_all_da()')
-    cProfile.run('compare_disk_gpt()')
+    cProfile.run('get_all_da()', sort="time")
+    cProfile.run('compare_disk_gpt()', sort="time")
 
 
     #print compare_disk_gpt()
