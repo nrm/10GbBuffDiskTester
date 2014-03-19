@@ -8,17 +8,7 @@ import subprocess
 import traceback
 import re
 import sys
-
-
-def get_da_str(string):
-    """
-    Get drive address from string"""
-    p=re.compile(r'da\d+')
-    try:
-        s=p.search(string)
-        return string[s.start():s.end()]
-    except AttributeError:
-        raise NameError("Empty string")
+import cProfile
 
 
 def get_all_da():
@@ -29,14 +19,6 @@ def get_all_da():
     except Exception:
         print traceback.format_exc()
         sys.exit()
-
-    #result_da=[]
-    #for line in P.split("\n"):
-        #try:
-            #result_da.append(get_da_str(line))
-        #except NameError:
-        #    pass
-    #return result_da
     return re.findall(r'da\d+', P)
 
 
@@ -56,9 +38,9 @@ def get_gpt(disknumber):
 def compare_disk_gpt():
     """docstring for compare_disk_gpt"""
     #get all disk drive in camcontrol
-    all_da=get_all_da()
+    #all_da=get_all_da()
     gpt_da=dict()
-    for disk in all_da:
+    for disk in get_all_da():
         gpt_da["%s"%get_gpt(disk)]=disk
 
     return gpt_da
@@ -96,6 +78,9 @@ def args():
 
 if __name__ == "__main__":
     #args()
+    cProfile.run('get_all_da()')
+    cProfile.run('compare_disk_gpt()')
 
-    print compare_disk_gpt()
+
+    #print compare_disk_gpt()
 
