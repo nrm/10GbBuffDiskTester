@@ -30,13 +30,14 @@ def get_all_da():
         print traceback.format_exc()
         sys.exit()
 
-    result_da=[]
-    for line in P.split("\n"):
-        try:
-            result_da.append(get_da_str(line))
-        except NameError:
-            pass
-    return result_da
+    #result_da=[]
+    #for line in P.split("\n"):
+        #try:
+            #result_da.append(get_da_str(line))
+        #except NameError:
+        #    pass
+    #return result_da
+    return re.findall(r'da\d+', P)
 
 
 def get_gpt(disknumber):
@@ -95,5 +96,6 @@ def args():
 
 if __name__ == "__main__":
     #args()
+
     print compare_disk_gpt()
 
