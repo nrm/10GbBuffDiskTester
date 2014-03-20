@@ -95,7 +95,7 @@ def args():
             output=args.outmode
         result = get_speed_one_log(infile=args.infile, outmode=output)
         for el_dict in result.keys():
-            print "%.3f\t%.3f\t%f"%(result[el_dict][0], result[el_dict][1], result[el_dict][2])
+            print "%s\t%.3f\t%.3f\t%f"%(el_dict, result[el_dict][0], result[el_dict][1], result[el_dict][2])
 
 
 if __name__ == "__main__":
