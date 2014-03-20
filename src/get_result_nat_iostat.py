@@ -29,7 +29,7 @@ def get_speed_one_log(infile, outmode="M"):
     """docstring for get_speed_one_log
 
     """
-    result=[]
+    result={}
     for line in open(infile, 'r'):
         """
                          extended device statistics
@@ -45,7 +45,8 @@ da39       0.0   0.0     0.0     0.0    0   0.0   0
             tmp=(line[0], line[-4])
             if tmp[1] != "0.0":
                 try:
-                    result.append(float(tmp[1])*1024)
+                    result[tmp[0]] = float(tmp[1])*1024
+                    #result.append(float(tmp[1])*1024)
                 except UnboundLocalError:
                     print tmp[1]
     if outmode=="M":
@@ -57,7 +58,11 @@ da39       0.0   0.0     0.0     0.0    0   0.0   0
     else:
         coef=1
 
-    return min(result)/coef, sum(result)/len(result)/coef, max(result)/coef
+    for el_dict in result.keys():
+        result[el_dict] = [min(result)/coef, sum(result)/len(result)/coef, max(result)/coef]
+
+    return result
+    #return min(result)/coef, sum(result)/len(result)/coef, max(result)/coef
 
 
 def args():
@@ -86,7 +91,8 @@ def args():
         else:
             output=args.outmode
         result = get_speed_one_log(infile=args.infile, outmode=output)
-        print "%.3f\t%.3f\t%f"%(result[0], result[1], result[2])
+        for el_dict in result.keys():
+            print "%.3f\t%.3f\t%f"%(result[el_dict][0], result[el_dict][1], result[el_dict][2])
 
 
 if __name__ == "__main__":
