@@ -81,6 +81,6 @@ if __name__ == "__main__":
     #cProfile.run('main()', sort="time")
 
     result = main()
-    pick_dict = pickle.load( open( "save.p", "rb" ) )
+    pick_dict = pickle.load( open( "gpt_da.tmp", "rb" ) )
     assert result == pick_dict, "result from function main not eqiulent dict cPickle from file"
 
