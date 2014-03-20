@@ -81,7 +81,8 @@ def args():
 
 
 if __name__ == "__main__":
-    args()
+    #args()
+    main()
     #cProfile.run('get_all_da()', sort="time")
     #cProfile.run('main()', sort="time")
 
