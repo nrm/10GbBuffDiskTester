@@ -45,10 +45,9 @@ da39       0.0   0.0     0.0     0.0    0   0.0   0
             tmp=(line[0], line[-4])
             if tmp[1] != "0.0":
                 try:
-                    result.append(float(tmp[1]))
+                    result.append(float(tmp[1])*1024)
                 except UnboundLocalError:
                     print tmp[1]
-    print result[0:1000]
     if outmode=="M":
         coef=1024*1024
     elif outmode=="K":
