@@ -8,7 +8,7 @@ import subprocess
 import traceback
 import re
 import sys
-import cProfile
+#import cProfile
 import cPickle as pickle
 
 
@@ -51,7 +51,7 @@ def main():
         except NameError:
             continue
 
-    pickle.dump(gpt_da, open("gpt_da.tmp", "w"))
+    pickle.dump(gpt_da, open("/tmp/gpt_da.tmp", "w"))
 
     return gpt_da
 
@@ -77,17 +77,15 @@ def args():
     if not args.infile:
         print parser.print_help()
     else:
-        pass
-        #result = get_speed_one_log(infile=args.infile, outmode=output)
-        #print "%.3f\t%.3f\t%f"%(result[0], result[1], result[2])
+        main()
 
 
 if __name__ == "__main__":
-    #args()
+    args()
     #cProfile.run('get_all_da()', sort="time")
     #cProfile.run('main()', sort="time")
 
-    result = main()
-    pick_dict = pickle.load( open( "gpt_da.tmp", "rb" ) )
-    assert result == pick_dict, "result from function main not eqiulent dict cPickle from file"
+    #result = main()
+    #pick_dict = pickle.load( open( "/tmp/gpt_da.tmp", "rb" ) )
+    #assert result == pick_dict, "result from function main not eqiulent dict cPickle from file"
 
