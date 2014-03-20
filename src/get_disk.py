@@ -33,7 +33,11 @@ def get_gpt(disknumber):
         print traceback.format_exc()
         sys.exit()
     #dict_gpt-da={} # {"gpt-label":"disk number"}
-    return P.strip().split()[-2]
+    gpt_label = P.strip().split()[-2]
+    if len(gpt_label) >= 3:
+        return P.strip().split()[-2]
+    else:
+        raise NameError('bad gpt label')
 
 
 def main():
@@ -42,7 +46,10 @@ def main():
     #all_da=get_all_da()
     gpt_da=dict()
     for disk in get_all_da():
-        gpt_da["%s"%get_gpt(disk)]=disk
+        try:
+            gpt_da["%s"%get_gpt(disk)]=disk
+        except NameError:
+            continue
 
     pickle.dump(gpt_da, open("gpt_da.tmp", "w"))
 
