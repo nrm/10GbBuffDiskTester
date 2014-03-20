@@ -3,10 +3,10 @@ NUM=$1
 BASE_PATH=`pwd`
 echo "Check \"\$NUM\""
 
-/usr/bin/cpuset -l 2 -x 269
-/usr/bin/cpuset -l 4 -x 271
-/usr/bin/cpuset -l 18 -x 282
-/usr/bin/cpuset -l 20 -x 284
+#/usr/bin/cpuset -l 2 -x 269
+#/usr/bin/cpuset -l 4 -x 271
+#/usr/bin/cpuset -l 18 -x 282
+#/usr/bin/cpuset -l 20 -x 284
 
 if [ $NUM ]
 then
