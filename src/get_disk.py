@@ -9,6 +9,7 @@ import traceback
 import re
 import sys
 import cProfile
+import cPickle as pickle
 
 
 def get_all_da():
@@ -35,13 +36,15 @@ def get_gpt(disknumber):
     return P.strip().split()[-2]
 
 
-def compare_disk_gpt():
-    """docstring for compare_disk_gpt"""
+def main():
+    """docstring for main"""
     #get all disk drive in camcontrol
     #all_da=get_all_da()
     gpt_da=dict()
     for disk in get_all_da():
         gpt_da["%s"%get_gpt(disk)]=disk
+
+    pickle.dump(gpt_da, open("gpt_da.tmp", "w"))
 
     return gpt_da
 
@@ -67,10 +70,6 @@ def args():
     if not args.infile:
         print parser.print_help()
     else:
-        if not args.infile:
-            output="M"
-        else:
-            output=args.outmode
         pass
         #result = get_speed_one_log(infile=args.infile, outmode=output)
         #print "%.3f\t%.3f\t%f"%(result[0], result[1], result[2])
@@ -78,9 +77,10 @@ def args():
 
 if __name__ == "__main__":
     #args()
-    cProfile.run('get_all_da()', sort="time")
-    cProfile.run('compare_disk_gpt()', sort="time")
+    #cProfile.run('get_all_da()', sort="time")
+    #cProfile.run('main()', sort="time")
 
-
-    #print compare_disk_gpt()
+    result = main()
+    pick_dict = pickle.load( open( "save.p", "rb" ) )
+    assert result == pick_dict, "result from function main not eqiulent dict cPickle from file"
 
