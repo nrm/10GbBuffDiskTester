@@ -29,7 +29,7 @@ SCAN_LOG=${CWD}/`date +"%H:%Mm"`-Result-${NUM}scan-${POOL_TYPE}-${POOL_DISK}-${D
 mkdir -p ${CWD}
 
 #compared gpt_labels and disk address
-/usr/local/bin/python ${GPT_DISK} &
+/usr/local/bin/python ${GPT_DISK}
 
 # Create zpool
 if (( IFPOOL == 1))
