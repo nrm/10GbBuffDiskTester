@@ -12,7 +12,7 @@ DD=${BASE_PATH}/dd_tester.sh
 TOP=${BASE_PATH}/top_loop_60scan.sh
 ZPOOL=${BASE_PATH}/../zfs/${DISK_TYPE}/${POOL_DISK}d${POOL_TYPE}.sh
 ZIOSTAT=${BASE_PATH}/ziostat.sh
-GPT_DISK==${BASE_PATH}/get_disk.py
+GPT_DISK=${BASE_PATH}/get_disk.py
 IOSTAT=${BASE_PATH}/iostat.py
 
 LOG_PATH=${BASE_PATH}/../Log/DD
