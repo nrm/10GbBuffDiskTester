@@ -32,14 +32,14 @@ def zpool_status():
 
     return zpool_dict
 
-def main(log, count, time ):
+def main(log, count, atime ):
     """docstring for main"""
     # zpool_dict  { "starageN": ["daX", "daY", ...], "storageN+1: [...] }
     zpool_dict = zpool_status()
     queue = dict()
     for el in xrange(8):
         el="storage%d"%el
-        queue[el] = subprocess.Popen(["iostat", "-dx", "%s"%(" ".join(zpool_dict[el])), time, "%d"%(int(count)*23)],stdout=open("%s_%s.log"%(log, el), "w") )
+        queue[el] = subprocess.Popen(["iostat", "-dx", "%s"%(" ".join(zpool_dict[el])), atime, "%d"%(int(count)*23)],stdout=open("%s_%s.log"%(log, el), "w") )
 
     # wait()
     while len(queue) > 0:
@@ -80,7 +80,7 @@ def args():
     if not args.log and not args.count and not args.time: # and not args.cwd:
         print parser.print_help()
     else:
-        main(log=args.log, count=args.count, time=args.time) #, cwd=args.cwd)
+        main(log=args.log, count=args.count, atime=args.time) #, cwd=args.cwd)
 
 
 if __name__ == "__main__":
