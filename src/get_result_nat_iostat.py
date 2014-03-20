@@ -42,10 +42,13 @@ da39       0.0   0.0     0.0     0.0    0   0.0   0
         """
         line=line.strip().split()
         if "da" in line[0]:
+            if not result.has_key(line[0]):
+                result[line[0]] = []
+
             tmp=(line[0], line[-4])
             if tmp[1] != "0.0":
                 try:
-                    result[tmp[0]] = float(tmp[1])*1024
+                    result[tmp[0]].append(float(tmp[1])*1024)
                     #result.append(float(tmp[1])*1024)
                 except UnboundLocalError:
                     print tmp[1]
@@ -59,7 +62,7 @@ da39       0.0   0.0     0.0     0.0    0   0.0   0
         coef=1
 
     for el_dict in result.keys():
-        result[el_dict] = [min(result[el_dict])/coef, sum(result[el_dict])/len(result[el_dict])/coef, max(result[el_dict])/coef]
+        result[el_dict] = [ min(result[el_dict])/coef, sum(result[el_dict])/len(result[el_dict])/coef, max(result[el_dict])/coef ]
 
     return result
     #return min(result)/coef, sum(result)/len(result)/coef, max(result)/coef
