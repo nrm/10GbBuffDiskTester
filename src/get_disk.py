@@ -77,7 +77,9 @@ def args():
     if not args.infile:
         print parser.print_help()
     else:
+        print "Start gpt da"
         main()
+        print "End gpt da"
 
 
 if __name__ == "__main__":
