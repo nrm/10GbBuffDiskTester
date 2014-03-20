@@ -45,7 +45,7 @@ da39       0.0   0.0     0.0     0.0    0   0.0   0
             tmp=(line[0], line[-4])
             if tmp[1] != "0.0":
                 try:
-                    result.append(tmp[1])
+                    result.append(int(tmp[1]))
                 except UnboundLocalError:
                     print tmp[1]
     if outmode=="M":
