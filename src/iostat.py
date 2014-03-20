@@ -41,15 +41,14 @@ def main(log, count, atime ):
         el="storage%d"%el
         cmd = "iostat -dx %s %s %d"%(" ".join(zpool_dict[el]), atime, int(count)*23)
         queue[el] = subprocess.Popen(cmd, shell=True, stdout=open("%s_%s.log"%(log, el), "w") )
-        #queue[el] = subprocess.Popen(["iostat", "-dx", "%s"%(" ".join(zpool_dict[el])), atime, "%d"%(int(count)*23)],stdout=open("%s_%s.log"%(log, el), "w") )
 
     # wait()
-    while len(queue) > 0:
-        for el in queue.keys():
-            if queue[el].poll() == 0:
-                queue.pop(el)
+    #while len(queue) > 0:
+    #    for el in queue.keys():
+    #        if queue[el].poll() == 0:
+    #            queue.pop(el)
 
-        time.sleep(1)
+    #    time.sleep(1)
 
     return 0
 
