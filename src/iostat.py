@@ -45,7 +45,7 @@ def main(log, count, atime ):
 
     # wait()
     while len(queue) > 0:
-        for el in queue:
+        for el in queue.keys():
             if queue[el].poll() == 0:
                 queue.pop(el)
 
