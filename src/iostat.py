@@ -39,7 +39,7 @@ def main(log, count, time ):
     queue = dict()
     for el in xrange(8):
         el="storage%d"%el
-        queue[el] = subprocess.Popen(["iostat", "-dx", "%s"%(" ".join(zpool_dict[el])), time, int(count)*23],stdout=open("%s_%s.log"%(log, el), "w") )
+        queue[el] = subprocess.Popen(["iostat", "-dx", "%s"%(" ".join(zpool_dict[el])), time, "%d"%(int(count)*23)],stdout=open("%s_%s.log"%(log, el), "w") )
 
     # wait()
     while len(queue) > 0:
