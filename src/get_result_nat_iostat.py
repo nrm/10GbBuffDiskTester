@@ -59,7 +59,7 @@ da39       0.0   0.0     0.0     0.0    0   0.0   0
         coef=1
 
     for el_dict in result.keys():
-        result[el_dict] = [min(result)/coef, sum(result)/len(result)/coef, max(result)/coef]
+        result[el_dict] = [min(result[el_dict])/coef, sum(result[el_dict])/len(result[el_dict])/coef, max(result[el_dict])/coef]
 
     return result
     #return min(result)/coef, sum(result)/len(result)/coef, max(result)/coef
