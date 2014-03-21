@@ -11,7 +11,7 @@ import cPickle as pickle
 import sys
 import re
 import traceback
-import time
+#import time
 
 
 def zpool_status():
