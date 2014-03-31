@@ -71,16 +71,18 @@ def list_drives():
     disk_dict = {}
     for index in xrange(100):
         try:
-            drives=subprocess.check_output(["mfiutil", "-u", "1", "show", "drives"])
+            drives=subprocess.check_output(["mfiutil", "-u", "%d"%index, "show", "drives"])
         except subprocess.CalledProcessError:
             print traceback.format_exc()
             break
         for line in drives.split("\n"):
             if "UNCONFIGURED GOOD" in line:
                 _,_,_,_,_,vendor, part_num,_,_,type_int, address = line.strip().split()
-                print "DEBUG LEVEL"
-                print vendor, part_num, type_int, address
-                enclosure, slot = address.split(":")
+                try:
+                    enclosure, slot = address.split(":")
+                except ValueError:
+                    print address
+                    sys.exit(-1)
                 if type_int == "SCSI-6":
                     if part_num in Type_int["NL-SAS"]:
                         type_int = "NL-SAS"
