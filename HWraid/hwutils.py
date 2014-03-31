@@ -81,8 +81,8 @@ def list_drives():
                 try:
                     enclosure, slot = address.split(":")
                 except ValueError:
-                    print address
-                    sys.exit(-1)
+                    enclosure = "None"
+                    slot = address
                 if type_int == "SCSI-6":
                     if part_num in Type_int["NL-SAS"]:
                         type_int = "NL-SAS"
