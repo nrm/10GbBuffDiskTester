@@ -78,6 +78,8 @@ def list_drives():
         for line in drives.split("\n"):
             if "UNCONFIGURED GOOD" in line:
                 _,_,_,_,_,vendor, part_num,_,_,type_int, address = line.strip().split()
+                print "DEBUG LEVEL"
+                print vendor, part_num, type_int, address
                 enclosure, slot = address.split(":")
                 if type_int == "SCSI-6":
                     if part_num in Type_int["NL-SAS"]:
