@@ -112,3 +112,6 @@ def umount(mount_point=["ch0", "ch1", "ch2", "ch3", "ch4", "ch5", "ch6", "ch7"])
             raise NameError
     return 1
 
+if __name__ == "__main__":
+    print list_drives()
+
