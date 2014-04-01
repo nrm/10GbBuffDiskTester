@@ -9,7 +9,7 @@ import sys
 import traceback
 import re
 
-
+#TODO: depricated
 def list_volumes(adapter):
     """
     Get list of raid volume
@@ -49,6 +49,9 @@ def list_volumes2(adapter):
       Id     Size    Level   Stripe  State   Cache   Name
      mfid2 ( 1117G) RAID-0      64K OPTIMAL Writes   <TESTR0>
 
+     Return:
+         result (list): list of tuple [ ("name", "mfid?"), (....) ]
+
     """
     try:
         volumes=subprocess.check_output(["mfiutil", "-u%s"%adapter, "show", "volumes"])
@@ -60,7 +63,7 @@ def list_volumes2(adapter):
         line = line.strip()
         if "mfid" in line[:4]:
             line = line.split()
-            result.append( (line[0], line[-1][1:-1]) )
+            result.append( (line[-1][1:-1], line[0]) )
 
     return result
 
@@ -147,7 +150,7 @@ def create_raid(disks, type_raid, name, adapter=1):
     mfiutil -u 1 name mfid2 TESTR0
     """
     #получение множества существующих томов ( mfid?? )
-    pre_volumes = set(list_volumes(adapter))
+    _pre_mfids = set( zip(*list_volumes2(adapter))[1])
     try:
         cmd = ["mfiutil", "-u1", "create", type_raid, "-s", "64K"]
         args = ','.join(disks)
@@ -157,8 +160,8 @@ def create_raid(disks, type_raid, name, adapter=1):
         print traceback.format_exc()
         raise NameError("Error: create mfi raid.\nDisks: %s\nRaid: %s"%(args, type_raid))
 
-    volumes = set(list_volumes(adapter))
-    _mfid_name = pre_volumes^volumes
+    _mfids = set( zip(*list_volumes2(adapter))[1])
+    _mfid_name = _pre_mfids^_mfids
 
     try:
         cmd = ["mfiutil", "-u1", "name", _mfid_name, name]
@@ -167,23 +170,43 @@ def create_raid(disks, type_raid, name, adapter=1):
         print traceback.format_exc()
         raise NameError("Error: nameed mfid")
 
-    return (_mfid_name, name)
+    return _mfid_name
 
-def delete_raid(mfid, name, adapter):
+def delete_raid(name, adapter=1):
     """
     mfiutil -u 1 delete mfid2
     """
     #получение множества существующих томов ( mfid?? )
-    pre_volumes = set(list_volumes(adapter))
-    if mfid not in pre_volumes:
-        return -2
+    _mfids = dict( zip(*list_volumes2(adapter)))
+    if not _mfids.has_key(name):
+        raise NameError("%s volume not exists"%name)
+    try:
+        cmd = ["mfiutil", "-u%s"%adapter, "delete", _mfids[name]]
+        subprocess.check_call([cmd])
+    except subprocess.CalledProcessError:
+        print cmd
+        print traceback.format_exc()
+        raise NameError("Error: Delete raid %s"%name)
+    return 0
+
 
 
 if __name__ == "__main__":
     print "\nResult of list_drives:\n"
-    print list_drives(1)
+    disks_dict = list_drives(1)
+    print disks_dict
     print "\nResult of list_volumes2:\n"
     print list_volumes2(1)
     print "\nResult of list_volumes:\n"
     print list_volumes(1)
+    print "create raid storage0"
+    #get list disk address
+    disks_address_tuple=zip( [disks_dict['SAS'].keys()[0]]*len(disks_dict['SAS'][disks_dict['SAS'].keys()[0]]), disks_dict['SAS'][disks_dict['SAS'].keys()[0]])
+    disks_address = map( ':'.join , disks_address_tuple)
+    disks_str = ','.join(map( ':'.join , disks_address)[:3])
+    print create_raid(disks_str, "raid0", "storage0")
+    print "\nResult of list_volumes2:\n"
+    print list_volumes2(1)
+    print delete_raid("storage0")
+
 
