@@ -150,7 +150,10 @@ def create_raid(disks, type_raid, name, adapter=1):
     mfiutil -u 1 name mfid2 TESTR0
     """
     #получение множества существующих томов ( mfid?? )
-    _pre_mfids = set( zip(*list_volumes2(adapter))[1])
+    try:
+        _pre_mfids = set( zip(*list_volumes2(adapter))[1])
+    except IndexError:
+        _pre_mfids = set()
     try:
         cmd = ["mfiutil", "-u%s"%adapter, "create", type_raid, "-s", "64K"]
         cmd.append(','.join(disks))
