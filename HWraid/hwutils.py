@@ -51,7 +51,7 @@ def list_volumes2(adapter):
 
     """
     try:
-        volumes=subprocess.check_output(["mfiutil", "-u", adapter, "show", "volumes"])
+        volumes=subprocess.check_output(["mfiutil", "-u%s"%adapter, "show", "volumes"])
     except Exception:
         print traceback.format_exc()
         sys.exit()
@@ -180,7 +180,10 @@ def delete_raid(mfid, name, adapter):
 
 
 if __name__ == "__main__":
+    print "\nResult of list_drives:\n"
     print list_drives(1)
+    print "\nResult of list_volumes2:\n"
     print list_volumes2(1)
+    print "\nResult of list_volumes:\n"
     print list_volumes(1)
 
