@@ -154,7 +154,7 @@ def create_raid(disks, type_raid, name, adapter=1):
     try:
         cmd = ["mfiutil", "-u%s"%adapter, "create", type_raid, "-s", "64K"]
         cmd.append(','.join(disks))
-        subprocess.check_call([cmd])
+        subprocess.check_call(cmd)
     except subprocess.CalledProcessError:
         print cmd
         print traceback.format_exc()
@@ -165,7 +165,7 @@ def create_raid(disks, type_raid, name, adapter=1):
 
     try:
         cmd = ["mfiutil", "-u1", "name", _mfid_name, name]
-        subprocess.check_call([cmd])
+        subprocess.check_call(cmd)
     except subprocess.CalledProcessError:
         print traceback.format_exc()
         raise NameError("Error: nameed mfid")
@@ -182,7 +182,7 @@ def delete_raid(name, adapter=1):
         raise NameError("%s volume not exists"%name)
     try:
         cmd = ["mfiutil", "-u%s"%adapter, "delete", _mfids[name]]
-        subprocess.check_call([cmd])
+        subprocess.check_call(cmd)
     except subprocess.CalledProcessError:
         print cmd
         print traceback.format_exc()
