@@ -154,7 +154,7 @@ def create_raid(disks, type_raid, name, adapter=1):
     try:
         cmd = ["mfiutil", "-u%s"%adapter, "create", type_raid, "-s", "64K"]
         args = ','.join(disks)
-        subprocess.check_call([cmd, args])
+        subprocess.check_call([cmd + args])
     except subprocess.CalledProcessError:
         print cmd, args
         print traceback.format_exc()
