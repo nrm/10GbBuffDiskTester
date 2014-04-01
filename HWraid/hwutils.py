@@ -94,7 +94,6 @@ def list_drives(adapter=1):
         drives=subprocess.check_output(["mfiutil", "-u", "%d"%adapter, "show", "drives"])
     except subprocess.CalledProcessError:
         print traceback.format_exc()
-        break
     for line in drives.split("\n"):
         if "UNCONFIGURED GOOD" in line:
             _,_,_,_,_,vendor, part_num,_,_,type_int, address = line.strip().split()
