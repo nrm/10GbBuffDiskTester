@@ -180,7 +180,7 @@ def delete_raid(name, adapter=1):
     mfiutil -u 1 delete mfid2
     """
     #получение множества существующих томов ( mfid?? )
-    _mfids = dict( zip(*list_volumes2(adapter)))
+    _mfids = dict( list_volumes2(adapter))
     if not _mfids.has_key(name):
         raise NameError("%s volume not exists"%name)
     try:
@@ -204,12 +204,12 @@ if __name__ == "__main__":
     print list_volumes(1)
     print "\ncreate raid storage0"
     #get list disk address
-    disks_address_tuple=zip( [disks_dict['SAS'].keys()[0]]*len(disks_dict['SAS'][disks_dict['SAS'].keys()[0]]), disks_dict['SAS'][disks_dict['SAS'].keys()[0]])
-    disks_address = map( ':'.join , disks_address_tuple)
-    disks_str = ','.join(disks_address[:3])
-    print "Disks: %s"%disks_str
-    #print create_raid(disks_str, "raid0", "storage0")
-    print create_raid(disks_address[:3], "raid0", "storage0")
+    #disks_address_tuple=zip( [disks_dict['SAS'].keys()[0]]*len(disks_dict['SAS'][disks_dict['SAS'].keys()[0]]), disks_dict['SAS'][disks_dict['SAS'].keys()[0]])
+    #disks_address = map( ':'.join , disks_address_tuple)
+    #disks_str = ','.join(disks_address[:3])
+    #print "Disks: %s"%disks_str
+    ##print create_raid(disks_str, "raid0", "storage0")
+    #print create_raid(disks_address[:3], "raid0", "storage0")
     print "\nResult of list_volumes2:\n"
     print list_volumes2(1)
     print delete_raid("storage0")
