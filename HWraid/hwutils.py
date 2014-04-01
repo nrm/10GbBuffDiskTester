@@ -58,8 +58,9 @@ def list_volumes2(adapter):
     result = []
     for line in volumes.split("\n"):
         line = line.strip()
+        print line
         if "mfid" in line[:4]:
-            line.split()
+            line = line.split()
             result.append( (line[0], line[-1][1:-1]) )
 
     return result
