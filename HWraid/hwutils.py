@@ -167,7 +167,7 @@ def create_raid(disks, type_raid, name, adapter=1):
     _mfid_name = _pre_mfids^_mfids
 
     try:
-        cmd = ["mfiutil", "-u1", "name", _mfid_name, name]
+        cmd = ["mfiutil", "-u1", "name", _mfid_name.pop(), name]
         subprocess.check_call(cmd)
     except subprocess.CalledProcessError:
         print traceback.format_exc()
