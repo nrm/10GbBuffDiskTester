@@ -153,12 +153,12 @@ def create_raid(disks, type_raid, name, adapter=1):
     _pre_mfids = set( zip(*list_volumes2(adapter))[1])
     try:
         cmd = ["mfiutil", "-u%s"%adapter, "create", type_raid, "-s", "64K"]
-        args = ','.join(disks)
-        subprocess.check_call([cmd.append(args)])
+        cmd = cmd.append(','.join(disks))
+        subprocess.check_call([cmd])
     except subprocess.CalledProcessError:
-        print cmd, args
+        print cmd
         print traceback.format_exc()
-        raise NameError("Error: create mfi raid.\nDisks: %s\nRaid: %s"%(args, type_raid))
+        raise NameError("Error: create mfi raid.\nRaid: %s"%( type_raid))
 
     _mfids = set( zip(*list_volumes2(adapter))[1])
     _mfid_name = _pre_mfids^_mfids
