@@ -64,7 +64,7 @@ def list_volumes2(adapter):
 
     return result
 
-def list_drives():
+def list_drives(adapter=1):
     """
     Get list of all drives on mfi1 controller
 
@@ -90,35 +90,34 @@ def list_drives():
     Type_int = {"NL-SAS":["ST91000640SS",], "SSD":["SSDSC2CW48",]}
 
     disk_dict = {}
-    for index in xrange(100):
-        try:
-            drives=subprocess.check_output(["mfiutil", "-u", "%d"%index, "show", "drives"])
-        except subprocess.CalledProcessError:
-            print traceback.format_exc()
-            break
-        for line in drives.split("\n"):
-            if "UNCONFIGURED GOOD" in line:
-                _,_,_,_,_,vendor, part_num,_,_,type_int, address = line.strip().split()
-                try:
-                    enclosure, slot = address.split(":")
-                except ValueError:
-                    enclosure = "None"
-                    slot = address
-                if type_int == "SCSI-6":
-                    if part_num in Type_int["NL-SAS"]:
-                        type_int = "NL-SAS"
-                    else:
-                        type_int = "SAS"
-                elif type_int == "SATA":
-                    if part_num in Type_int["SSD"]:
-                        type_int = "SSD"
+    try:
+        drives=subprocess.check_output(["mfiutil", "-u", "%d"%adapter, "show", "drives"])
+    except subprocess.CalledProcessError:
+        print traceback.format_exc()
+        break
+    for line in drives.split("\n"):
+        if "UNCONFIGURED GOOD" in line:
+            _,_,_,_,_,vendor, part_num,_,_,type_int, address = line.strip().split()
+            try:
+                enclosure, slot = address.split(":")
+            except ValueError:
+                enclosure = "None"
+                slot = address
+            if type_int == "SCSI-6":
+                if part_num in Type_int["NL-SAS"]:
+                    type_int = "NL-SAS"
+                else:
+                    type_int = "SAS"
+            elif type_int == "SATA":
+                if part_num in Type_int["SSD"]:
+                    type_int = "SSD"
 
-                if not disk_dict.has_key(type_int):
-                    disk_dict[type_int]={}
-                if not disk_dict[type_int].has_key(enclosure):
-                    disk_dict[type_int][enclosure] = []
+            if not disk_dict.has_key(type_int):
+                disk_dict[type_int]={}
+            if not disk_dict[type_int].has_key(enclosure):
+                disk_dict[type_int][enclosure] = []
 
-                disk_dict[type_int][enclosure].append(slot)
+            disk_dict[type_int][enclosure].append(slot)
 
 
     return disk_dict
@@ -182,5 +181,7 @@ def delete_raid(mfid, name, adapter):
 
 
 if __name__ == "__main__":
-    print list_drives()
+    print list_drives(1)
+    print list_volumes2(1)
+    print list_volumes(1)
 
