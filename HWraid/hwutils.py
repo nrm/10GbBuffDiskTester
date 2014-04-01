@@ -152,7 +152,7 @@ def create_raid(disks, type_raid, name, adapter=1):
     #получение множества существующих томов ( mfid?? )
     _pre_mfids = set( zip(*list_volumes2(adapter))[1])
     try:
-        cmd = ["mfiutil", "-u1", "create", type_raid, "-s", "64K"]
+        cmd = ["mfiutil", "-u%s"%adapter, "create", type_raid, "-s", "64K"]
         args = ','.join(disks)
         subprocess.check_call([cmd, args])
     except subprocess.CalledProcessError:
@@ -199,12 +199,14 @@ if __name__ == "__main__":
     print list_volumes2(1)
     print "\nResult of list_volumes:\n"
     print list_volumes(1)
-    print "create raid storage0"
+    print "\ncreate raid storage0"
     #get list disk address
     disks_address_tuple=zip( [disks_dict['SAS'].keys()[0]]*len(disks_dict['SAS'][disks_dict['SAS'].keys()[0]]), disks_dict['SAS'][disks_dict['SAS'].keys()[0]])
     disks_address = map( ':'.join , disks_address_tuple)
-    disks_str = ','.join(map( ':'.join , disks_address)[:3])
-    print create_raid(disks_str, "raid0", "storage0")
+    disks_str = ','.join(disks_address[:3])
+    print "Disks: %s"%disks_str
+    #print create_raid(disks_str, "raid0", "storage0")
+    print create_raid(disks_address[:3], "raid0", "storage0")
     print "\nResult of list_volumes2:\n"
     print list_volumes2(1)
     print delete_raid("storage0")
