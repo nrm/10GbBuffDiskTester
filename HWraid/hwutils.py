@@ -177,7 +177,7 @@ class Mfiutil():
     def manager_create_reaid(self, type_raid, pool_disks_number, pool_number = 8):
         """
         Input:
-            type_pool (str):            [raid0 or raid5]
+            type_raid (str):            [raid0 or raid5]
             pool_disks_number (int):    number of disks in each pool
             pool_number (int):          number of pool
         """
@@ -199,7 +199,7 @@ class Mfiutil():
                     name_pool = "storage%d"%(index + name_index)
                     curent_disks_address = disks_address[_start:_end]
                     try:
-                        self.create(disks = curent_disks_address, type_raid = type_raid, name = name_pool, adapter = 1)
+                        self.create_raid(disks = curent_disks_address, type_raid = type_raid, name = name_pool, adapter = 1)
                     except:
                         print traceback.format_exc()
                         sys.exit(-1)
@@ -221,7 +221,7 @@ class Mfiutil():
                 name_pool = "storage%d"%index
                 curent_disks_address = disks_address[_start:_end]
                 try:
-                    self.create(disks = curent_disks_address, type_raid = type_raid, name = name_pool, adapter = 1)
+                    self.create_raid(disks = curent_disks_address, type_raid = type_raid, name = name_pool, adapter = 1)
                 except:
                     print traceback.format_exc()
                     sys.exit(-1)
