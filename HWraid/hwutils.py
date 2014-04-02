@@ -284,7 +284,7 @@ class Mfiutil():
             pool_dev_name (str): name raid in /dev -> "mfid2"
             mount_point   (str): name on mount point in / -> "ch0"
         """
-        mount_point = os.path("/", mount_point)
+        mount_point = os.path.join("/", mount_point)
         if not os.path.exists(mount_point):
             os.mkdir(mount_point)
         pool_dev_name = os.path.join("/dev", pool_dev_name)
