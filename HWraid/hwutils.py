@@ -154,6 +154,18 @@ class Mfiutil():
             print traceback.format_exc()
             raise NameError("Error: nameed mfid")
 
+        try:
+            cmd = ["gpart", "create", "-s", "gpt", mfid]
+            subprocess.check_call(cmd)
+            cmd = ["gpart", "add", "-t", "freebsd", "mfid3"]
+            subprocess.check_call(cmd)
+            cmd = ["newfs", "/dev/%ss1"%mfid]
+            subprocess.check_call(cmd)
+        except subprocess.CalledProcessError:
+            print cmd
+            print traceback.format_exc()
+            raise SystemError("create mfi raid.\nRaid: %s"%( type_raid))
+
         return mfid
 
     def delete_raid(self, name, adapter=1):
