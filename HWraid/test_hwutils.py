@@ -108,7 +108,7 @@ class TestMfiutil (unittest.TestCase):
         with patch('self.list_volumes') as list_volumes:
             list_volumes.return_value = self.result_list_volumes
             with patch('subprocess.check_call') as perm_mock:
-                pass
+                perm_mock.return_value = 0
 
 
 

@@ -194,7 +194,7 @@ class Mfiutil():
                 enc_disks = disks[enc_name]
                 disks_address = map(':'.join, zip( [enc_name]*len(enc_disks), enc_disks))
                 _start  = 0
-                _end    = 3
+                _end    = pool_disks_number
                 for index in xrange(pool_number/2):
                     name_pool = "storage%d"%(index + name_index)
                     curent_disks_address = disks_address[_start:_end]
@@ -203,9 +203,9 @@ class Mfiutil():
                     except:
                         print traceback.format_exc()
                         sys.exit(-1)
-                    _start   += 3
-                    _end     += 3
-                name_index += 4
+                    _start   += pool_disks_number
+                    _end     += pool_disks_number
+                name_index += pool_number/2
             return self.list_volumes(1)
 
 
@@ -216,7 +216,7 @@ class Mfiutil():
                 raise NameError("In data array not enough disks, Need: %s, exists: %s"%(disks_numbers, enc_disks))
             disks_address = map(':'.join, zip( [enc_name]*len(enc_disks), enc_disks))
             _start  = 0
-            _end    = 3
+            _end    = pool_disks_number
             for index in xrange(pool_number):
                 name_pool = "storage%d"%index
                 curent_disks_address = disks_address[_start:_end]
@@ -225,8 +225,8 @@ class Mfiutil():
                 except:
                     print traceback.format_exc()
                     sys.exit(-1)
-                _start   += 3
-                _end     += 3
+                _start   += pool_disks_number
+                _end     += pool_disks_number
             return self.list_volumes(1)
 
         elif len(disks.keys()) < 1:
