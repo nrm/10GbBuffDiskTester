@@ -307,7 +307,7 @@ class Mfiutil():
             os.mkdir(mount_point)
         pool_dev_name = os.path.join("/dev", pool_dev_name)
         try:
-           subprocess.check_call(["mount", pool_dev_name, mount_point])
+           subprocess.check_call(["mount", pool_dev_name, mount_point+"s1"])
         except subprocess.CalledProcessError:
             #print traceback.format_exc()
             raise SystemError("mount return error")
