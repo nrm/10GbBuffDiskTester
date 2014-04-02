@@ -268,17 +268,17 @@ class Mfiutil():
             name = "storage%d"%i
             mount_point = "ch%d"%i
             try:
-                self.delete_raid(name, adapter)
-            except:
-                print traceback.format_exc()
-                continue
-            try:
                 self.umount(mount_point)
             except SystemError:
                 continue
             except:
                 print traceback.format_exc()
                 sys.exit(-1)
+            try:
+                self.delete_raid(name, adapter)
+            except:
+                print traceback.format_exc()
+                continue
         return self.list_volumes(adapter)
 
 
