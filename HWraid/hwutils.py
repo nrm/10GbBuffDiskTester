@@ -174,7 +174,7 @@ class Mfiutil():
             raise NameError("Error: Delete raid %s"%name)
         return 0
 
-    def manager_create_reaid(self, type_raid, pool_disks_number, pool_number = 8, adapter = 1):
+    def manager_create_raid(self, type_raid, pool_disks_number, pool_number = 8, adapter = 1):
         """
         Input:
             type_raid (str):            [raid0 or raid5]
@@ -232,7 +232,7 @@ class Mfiutil():
             raise NameError("Alarm no planed variant")
 
         name_mfids = dict(self.list_volumes(adapter))
-        for i, name in enumerate(name_mfids.keys()):
+        for i, name in enumerate(sorted(name_mfids.keys())):
             mount_point = "ch%d"%i
             try:
                 self.mount(pool_dev_name = name_mfids[name], mount_point = mount_point)
@@ -253,6 +253,7 @@ class Mfiutil():
                 self.delete_raid(name, adapter)
             except:
                 print traceback.format_exc()
+                continue
             try:
                 self.umount(mount_point)
             except SystemError:
@@ -265,10 +266,13 @@ class Mfiutil():
 
     def umount(self, mount_point):
         """
+        Input:
+            mount_point (str):  name of dir name in "/" -> "ch0"
 
         """
         try:
-           subprocess.check_call(["umount", mount_point])
+            mount_point = os.path.join('/', mount_point)
+            subprocess.check_call(["umount", mount_point])
         except subprocess.CalledProcessError:
             print traceback.format_exc()
             raise SystemError("umount return error")
@@ -280,13 +284,14 @@ class Mfiutil():
             pool_dev_name (str): name raid in /dev -> "mfid2"
             mount_point   (str): name on mount point in / -> "ch0"
         """
-        mount_point = "/%s"%mount_point
+        mount_point = os.path("/", mount_point)
         if not os.path.exists(mount_point):
             os.mkdir(mount_point)
+        pool_dev_name = os.path.join("/dev", pool_dev_name)
         try:
            subprocess.check_call(["mount", pool_dev_name, mount_point])
         except subprocess.CalledProcessError:
-            print traceback.format_exc()
+            #print traceback.format_exc()
             raise SystemError("mount return error")
         return 0
 
