@@ -157,14 +157,14 @@ class Mfiutil():
         try:
             cmd = ["gpart", "create", "-s", "gpt", mfid]
             subprocess.check_call(cmd)
-            cmd = ["gpart", "add", "-t", "freebsd", "mfid3"]
+            cmd = ["gpart", "add", "-t", "freebsd", mfid]
             subprocess.check_call(cmd)
             cmd = ["newfs", "/dev/%ss1"%mfid]
             subprocess.check_call(cmd)
         except subprocess.CalledProcessError:
-            print cmd
+            print "cmd:", cmd
             print traceback.format_exc()
-            raise SystemError("create mfi raid.\nRaid: %s"%( type_raid))
+            raise SystemError("create mfid raid.\tRaid: %s"%( type_raid))
 
         return mfid
 
