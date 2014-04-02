@@ -155,6 +155,12 @@ class Mfiutil():
             raise NameError("Error: nameed mfid")
 
         try:
+            cmd = ["gpart", "destroy", "-F", mfid]
+            subprocess.check_call(cmd)
+        except subprocess.CalledProcessError:
+            print traceback.format_exc()
+
+        try:
             cmd = ["gpart", "create", "-s", "gpt", mfid]
             subprocess.check_call(cmd)
             cmd = ["gpart", "add", "-t", "freebsd", mfid]
@@ -200,7 +206,7 @@ class Mfiutil():
             for enc_name in disks.keys():
                 enc_disks = disks[enc_name]
                 if disks_numbers/2 > len(enc_disks):
-                    raise NameError("In enclose not enough disks, Need: %s, exists: %s"%(disks_numbers/2, enc_disks))
+                    raise NameError("In enclose not enough disks, Need: %s, exists: %s"%(disks_numbers/2, len(enc_disks)))
             name_index = 0
             for enc_name in disks.keys():
                 enc_disks = disks[enc_name]
@@ -223,7 +229,7 @@ class Mfiutil():
             enc_name = disks.keys()[0]
             enc_disks = disks[enc_name]
             if disks_numbers > len(enc_disks):
-                raise NameError("In data array not enough disks, Need: %s, exists: %s"%(disks_numbers, enc_disks))
+                raise NameError("In data array not enough disks, Need: %s, exists: %s"%(disks_numbers, len(enc_disks)))
             disks_address = map(':'.join, zip( [enc_name]*len(enc_disks), enc_disks))
             _start  = 0
             _end    = pool_disks_number
