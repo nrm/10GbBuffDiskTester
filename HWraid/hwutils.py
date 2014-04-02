@@ -9,197 +9,252 @@ import sys
 import traceback
 import re
 
-#TODO: depricated
-def list_volumes(adapter):
+
+class Mfiutil():
     """
-    Get list of raid volume
+    Класс описывающий работу с утилитой mfiutil (OS FreeBSD ) управляющей
+    hardware raid контроллером LSI MegaRaid
 
-    {{{
 
-    # mfiutil -u 1 show config
-        mfi1 Configuration: 2 arrays, 2 volumes, 0 spares
-        array 0 of 2 drives:
-            drive 29 (   0.0) ONLINE <SEAGATE ST91000640SS AS08 serial=9XG3ZREM> SCSI-6
-            drive 30 (   0.0) ONLINE <SEAGATE ST91000640SS AS08 serial=9XG3YZ7Y> SCSI-6
-        array 1 of 3 drives:
-            drive 31 (   0.0) ONLINE <SEAGATE ST91000640SS AS08 serial=9XG3ZA9R> SCSI-6
-            drive 32 (   0.0) ONLINE <SEAGATE ST91000640SS AS08 serial=9XG3ZE71> SCSI-6
-            drive 33 (   0.0) ONLINE <SEAGATE ST91000640SS AS08 serial=9XG3Z989> SCSI-6
-        volume mfid2 (1862G) RAID-0 64K OPTIMAL <TESTR0> spans:
-            array 0
-        volume mfid3 (2793G) RAID-0 1M OPTIMAL <Test3DR0> spans:
-            array 1
-    }}}
+    Command:
+        list_volumes : get list of pair (volume_name: mfi_number
+        list_drives   : get list of free disk device ( "UNCONFIGURED GOOD")
+        create_raid   : create raid volume
+        delete_raid   : delete raid volume
 
-    Return:
-        (list) (str) : list of volume name (Example: ["mfid2", "mfid3"]
-    """
-    try:
-        volumes=subprocess.check_output(["mfiutil", "-u%s"%adapter, "show", "config"])
-    except Exception:
-        print traceback.format_exc()
-        sys.exit()
-    return re.findall("(?<=volume )\w+\d+", volumes)
 
-def list_volumes2(adapter):
-    """
-    mfiutil -u 1 show volumes
-
-    mfi1 Volumes:
-      Id     Size    Level   Stripe  State   Cache   Name
-     mfid2 ( 1117G) RAID-0      64K OPTIMAL Writes   <TESTR0>
-
-     Return:
-         result (list): list of tuple [ ("name", "mfid?"), (....) ]
 
     """
-    try:
-        volumes=subprocess.check_output(["mfiutil", "-u%s"%adapter, "show", "volumes"])
-    except Exception:
-        print traceback.format_exc()
-        sys.exit()
-    result = []
-    for line in volumes.split("\n"):
-        line = line.strip()
-        if "mfid" in line[:4]:
-            line = line.split()
-            result.append( (line[-1][1:-1], line[0]) )
+    def __init__(self, type_disk):
+        #super(Mfiutil, self).__init__()
+        self.type_disk = type_disk
+        self.type_init = {"NL-SAS":["ST91000640SS",], "SSD":["SSDSC2CW48",]}
 
-    return result
+    def list_volumes(self, adapter):
+        """
+        mfiutil -u 1 show volumes
 
-def list_drives(adapter=1):
-    """
-    Get list of all drives on mfi1 controller
+        mfi1 Volumes:
+          Id     Size    Level   Stripe  State   Cache   Name
+         mfid2 ( 1117G) RAID-0      64K OPTIMAL Writes   <TESTR0>
 
-    {{{
-    # mfiutil -u 1 show drives
-        mfi1 Physical Drives:
-        29 (   0.0) ONLINE            <SEAGATE ST91000640SS AS08 serial=9XG3ZREM> SCSI-6 E2:S5
-        30 (   0.0) ONLINE            <SEAGATE ST91000640SS AS08 serial=9XG3YZ7Y> SCSI-6 E2:S3
-        31 (   0.0) ONLINE            <SEAGATE ST91000640SS AS08 serial=9XG3ZA9R> SCSI-6 E2:S2
-        32 (   0.0) ONLINE            <SEAGATE ST91000640SS AS08 serial=9XG3ZE71> SCSI-6 E2:S1
-        33 (   0.0) ONLINE            <SEAGATE ST91000640SS AS08 serial=9XG3Z989> SCSI-6 E2:S0
-        34 (   0.0) UNCONFIGURED GOOD <SEAGATE ST91000640SS AS08 serial=9XG3YPKX> SCSI-6 E2:S4
-        35 (   0.0) UNCONFIGURED GOOD <SEAGATE ST91000640SS AS08 serial=9XG3X5YQ> SCSI-6 E2:S6
-        36 (   0.0) UNCONFIGURED GOOD <SEAGATE ST91000640SS AS08 serial=9XG3ZED1> SCSI-6 E2:S7
-        37 (   0.0) UNCONFIGURED GOOD <SEAGATE ST91000640SS AS08 serial=9XG48THZ> SCSI-6 E2:S8
-        ....................................................................................
-        ....................................................................................
-    }}}
+         Return:
+             result (list): list of tuple [ ("name", "mfid?"), (....) ]
 
-    Return:
-        (list) (int) : list of drive number (Example: [12, 13]
-    """
-    Type_int = {"NL-SAS":["ST91000640SS",], "SSD":["SSDSC2CW48",]}
-
-    disk_dict = {}
-    try:
-        drives=subprocess.check_output(["mfiutil", "-u", "%d"%adapter, "show", "drives"])
-    except subprocess.CalledProcessError:
-        print traceback.format_exc()
-    for line in drives.split("\n"):
-        if "UNCONFIGURED GOOD" in line:
-            _,_,_,_,_,vendor, part_num,_,_,type_int, address = line.strip().split()
-            try:
-                enclosure, slot = address.split(":")
-            except ValueError:
-                enclosure = "None"
-                slot = address
-            if type_int == "SCSI-6":
-                if part_num in Type_int["NL-SAS"]:
-                    type_int = "NL-SAS"
-                else:
-                    type_int = "SAS"
-            elif type_int == "SATA":
-                if part_num in Type_int["SSD"]:
-                    type_int = "SSD"
-
-            if not disk_dict.has_key(type_int):
-                disk_dict[type_int]={}
-            if not disk_dict[type_int].has_key(enclosure):
-                disk_dict[type_int][enclosure] = []
-
-            disk_dict[type_int][enclosure].append(slot)
-
-
-    return disk_dict
-
-
-
-def umount(mount_point=["ch0", "ch1", "ch2", "ch3", "ch4", "ch5", "ch6", "ch7"]):
-    """
-
-    """
-    for point in mount_point:
+        """
         try:
-           subprocess.check_call(["umount", point])
+            volumes=subprocess.check_output(["mfiutil", "-u%s"%adapter, "show", "volumes"])
+        except Exception:
+            print traceback.format_exc()
+            sys.exit()
+        result = []
+        for line in volumes.split("\n"):
+            line = line.strip()
+            if "mfid" in line[:4]:
+                line = line.split()
+                result.append( (line[-1][1:-1], line[0]) )
+
+        return result
+
+    def list_drives(self, adapter=1):
+        """
+        Get list of all drives on mfi1 controller
+
+        {{{
+        # mfiutil -u 1 show drives
+            mfi1 Physical Drives:
+            29 (   0.0) ONLINE            <SEAGATE ST91000640SS AS08 serial=9XG3ZREM> SCSI-6 E2:S5
+            30 (   0.0) ONLINE            <SEAGATE ST91000640SS AS08 serial=9XG3YZ7Y> SCSI-6 E2:S3
+            31 (   0.0) ONLINE            <SEAGATE ST91000640SS AS08 serial=9XG3ZA9R> SCSI-6 E2:S2
+            32 (   0.0) ONLINE            <SEAGATE ST91000640SS AS08 serial=9XG3ZE71> SCSI-6 E2:S1
+            33 (   0.0) ONLINE            <SEAGATE ST91000640SS AS08 serial=9XG3Z989> SCSI-6 E2:S0
+            34 (   0.0) UNCONFIGURED GOOD <SEAGATE ST91000640SS AS08 serial=9XG3YPKX> SCSI-6 E2:S4
+            35 (   0.0) UNCONFIGURED GOOD <SEAGATE ST91000640SS AS08 serial=9XG3X5YQ> SCSI-6 E2:S6
+            36 (   0.0) UNCONFIGURED GOOD <SEAGATE ST91000640SS AS08 serial=9XG3ZED1> SCSI-6 E2:S7
+            37 (   0.0) UNCONFIGURED GOOD <SEAGATE ST91000640SS AS08 serial=9XG48THZ> SCSI-6 E2:S8
+            ....................................................................................
+            ....................................................................................
+        }}}
+
+        Return:
+            (list) (int) : list of drive number (Example: [12, 13]
+        """
+
+        disk_dict = {}
+        try:
+            drives=subprocess.check_output(["mfiutil", "-u", "%d"%adapter, "show", "drives"])
         except subprocess.CalledProcessError:
             print traceback.format_exc()
-            raise NameError
-    return 1
+        for line in drives.split("\n"):
+            if "UNCONFIGURED GOOD" in line:
+                _,_,_,_,_,vendor, part_num,_,_,type_int, address = line.strip().split()
+                try:
+                    enclosure, slot = address.split(":")
+                except ValueError:
+                    enclosure = "None"
+                    slot = address
+                if type_int == "SCSI-6":
+                    if part_num in self.type_init["NL-SAS"]:
+                        type_int = "NL-SAS"
+                    else:
+                        type_int = "SAS"
+                elif type_int == "SATA":
+                    if part_num in self.type_init["SSD"]:
+                        type_int = "SSD"
 
-def create_raid(disks, type_raid, name, adapter=1):
-    """
-    Input:
-        disks (list):
-        type_raid (str):    type of raid [raid0, raid5]
-        name (str):         name of mfid? raid [storage0, ....]
-        adapter (int):      number of raid controllers
+                if not disk_dict.has_key(type_int):
+                    disk_dict[type_int]={}
+                if not disk_dict[type_int].has_key(enclosure):
+                    disk_dict[type_int][enclosure] = []
 
-    mfiutil -u 1 create raid0 -s 64K 29,30
-    mfiutil -u 1 name mfid2 TESTR0
-    """
-    #получение множества существующих томов ( mfid?? )
-    try:
-        _pre_mfids = set( zip(*list_volumes2(adapter))[1])
-    except IndexError:
-        _pre_mfids = set()
-    try:
-        cmd = ["mfiutil", "-u%s"%adapter, "create", type_raid, "-s", "64K"]
-        cmd.append(','.join(disks))
-        subprocess.check_call(cmd)
-    except subprocess.CalledProcessError:
-        print cmd
-        print traceback.format_exc()
-        raise NameError("Error: create mfi raid.\nRaid: %s"%( type_raid))
+                disk_dict[type_int][enclosure].append(slot)
 
-    _mfids = set( zip(*list_volumes2(adapter))[1])
-    _mfid_name = _pre_mfids^_mfids
 
-    try:
-        cmd = ["mfiutil", "-u1", "name", _mfid_name.pop(), name]
-        subprocess.check_call(cmd)
-    except subprocess.CalledProcessError:
-        print traceback.format_exc()
-        raise NameError("Error: nameed mfid")
+        return disk_dict
 
-    return _mfid_name
+    def create_raid(self, disks, type_raid, name, adapter=1):
+        """
+        Input:
+            disks (list):
+            type_raid (str):    type of raid [raid0, raid5]
+            name (str):         name of mfid? raid [storage0, ....]
+            adapter (int):      number of raid controllers
 
-def delete_raid(name, adapter=1):
-    """
-    mfiutil -u 1 delete mfid2
-    """
-    #получение множества существующих томов ( mfid?? )
-    _mfids = dict( list_volumes2(adapter))
-    if not _mfids.has_key(name):
-        raise NameError("%s volume not exists"%name)
-    try:
-        cmd = ["mfiutil", "-u%s"%adapter, "delete", _mfids[name]]
-        subprocess.check_call(cmd)
-    except subprocess.CalledProcessError:
-        print cmd
-        print traceback.format_exc()
-        raise NameError("Error: Delete raid %s"%name)
-    return 0
+        mfiutil -u 1 create raid0 -s 64K 29,30
+        mfiutil -u 1 name mfid2 TESTR0
+        """
+        #получение множества существующих томов ( mfid?? )
+        try:
+            _pre_mfids = set( zip(*self.list_volumes(adapter))[1])
+        except IndexError:
+            _pre_mfids = set()
+        if name in _pre_mfids:
+            raise ValueError("name %s for raid already used")
+        try:
+            cmd = ["mfiutil", "-u%s"%adapter, "create", type_raid, "-s", "64K"]
+            cmd.append(','.join(disks))
+            subprocess.check_call(cmd)
+        except subprocess.CalledProcessError:
+            print cmd
+            print traceback.format_exc()
+            raise NameError("Error: create mfi raid.\nRaid: %s"%( type_raid))
 
+        _mfids = set( zip(*self.list_volumes(adapter))[1])
+        try:
+            _mfids = set( zip(*self.list_volumes(adapter))[1])
+        except IndexError:
+            _mfids = set()
+        _mfid_name = _pre_mfids^_mfids
+        mfid = _mfid_name.pop()
+
+        try:
+            cmd = ["mfiutil", "-u1", "name", mfid, name]
+            subprocess.check_call(cmd)
+        except subprocess.CalledProcessError:
+            print traceback.format_exc()
+            raise NameError("Error: nameed mfid")
+
+        return mfid
+
+    def delete_raid(self, name, adapter=1):
+        """
+        mfiutil -u 1 delete mfid2
+        """
+        #получение множества существующих томов ( mfid?? )
+        _mfids = dict( self.list_volumes(adapter))
+        if not _mfids.has_key(name):
+            #raise NameError("%s volume not exists"%name)
+            return 0
+        try:
+            cmd = ["mfiutil", "-u%s"%adapter, "delete", _mfids[name]]
+            subprocess.check_call(cmd)
+        except subprocess.CalledProcessError:
+            print cmd
+            print traceback.format_exc()
+            raise NameError("Error: Delete raid %s"%name)
+        return 0
+
+    def manager_create_reaid(self, type_raid, pool_disks_number, pool_number = 8):
+        """
+        Input:
+            type_pool (str):            [raid0 or raid5]
+            pool_disks_number (int):    number of disks in each pool
+            pool_number (int):          number of pool
+        """
+        disks_numbers = pool_number * pool_disks_number
+        disks_dict = self.list_drives(1)
+        disks = disks_dict[self.type_disk]
+        if len(disks.keys()) == 2:
+            for enc_name in disks.keys():
+                enc_disks = disks[enc_name]
+                if disks_numbers/2 > len(enc_disks):
+                    raise NameError("In enclose not enough disks, Need: %s, exists: %s"%(disks_numbers/2, enc_disks))
+            name_index = 0
+            for enc_name in disks.keys():
+                enc_disks = disks[enc_name]
+                disks_address = map(':'.join, zip( [enc_name]*len(enc_disks), enc_disks))
+                _start  = 0
+                _end    = 3
+                for index in xrange(pool_number/2):
+                    name_pool = "storage%d"%(index + name_index)
+                    curent_disks_address = disks_address[_start:_end]
+                    try:
+                        self.create(disks = curent_disks_address, type_raid = type_raid, name = name_pool, adapter = 1)
+                    except:
+                        print traceback.format_exc()
+                        sys.exit(-1)
+                    _start   += 3
+                    _end     += 3
+                name_index += 4
+            return self.list_volumes(1)
+
+
+        elif len(disks.keys()) == 1:
+            enc_name = disks.keys()[0]
+            enc_disks = disks[enc_name]
+            if disks_numbers > len(enc_disks):
+                raise NameError("In data array not enough disks, Need: %s, exists: %s"%(disks_numbers, enc_disks))
+            disks_address = map(':'.join, zip( [enc_name]*len(enc_disks), enc_disks))
+            _start  = 0
+            _end    = 3
+            for index in xrange(pool_number):
+                name_pool = "storage%d"%index
+                curent_disks_address = disks_address[_start:_end]
+                try:
+                    self.create(disks = curent_disks_address, type_raid = type_raid, name = name_pool, adapter = 1)
+                except:
+                    print traceback.format_exc()
+                    sys.exit(-1)
+                _start   += 3
+                _end     += 3
+            return self.list_volumes(1)
+
+        elif len(disks.keys()) < 1:
+            raise NameError("Not enclosere with %s type of disk"%self.type_disk)
+        else:
+            raise NameError("Alarm no planed variant")
+
+
+    def umount(self, mount_point=["ch0", "ch1", "ch2", "ch3", "ch4", "ch5", "ch6", "ch7"]):
+        """
+
+        """
+        for point in mount_point:
+            try:
+               subprocess.check_call(["umount", point])
+            except subprocess.CalledProcessError:
+                print traceback.format_exc()
+                raise NameError
+        return 1
 
 
 if __name__ == "__main__":
+
     print "\nResult of list_drives:\n"
     disks_dict = list_drives(1)
     print disks_dict
-    print "\nResult of list_volumes2:\n"
-    print list_volumes2(1)
+    print "\nResult of list_volumes:\n"
+    print list_volumes(1)
     print "\nResult of list_volumes:\n"
     print list_volumes(1)
     print "\ncreate raid storage0"
@@ -210,8 +265,8 @@ if __name__ == "__main__":
     #print "Disks: %s"%disks_str
     ##print create_raid(disks_str, "raid0", "storage0")
     #print create_raid(disks_address[:3], "raid0", "storage0")
-    print "\nResult of list_volumes2:\n"
-    print list_volumes2(1)
+    print "\nResult of list_volumes:\n"
+    print list_volumes(1)
     print delete_raid("storage0")
 
 
