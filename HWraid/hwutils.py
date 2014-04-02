@@ -270,7 +270,7 @@ class Mfiutil():
             try:
                 self.umount(mount_point)
             except SystemError:
-                continue
+                print traceback.format_exc()
             except:
                 print traceback.format_exc()
                 sys.exit(-1)
