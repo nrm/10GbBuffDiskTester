@@ -8,6 +8,7 @@ import subprocess
 import sys
 import traceback
 import re
+import os
 
 
 class Mfiutil():
@@ -30,7 +31,7 @@ class Mfiutil():
         self.type_disk = type_disk
         self.type_init = {"NL-SAS":["ST91000640SS",], "SSD":["SSDSC2CW48",]}
 
-    def list_volumes(self, adapter):
+    def list_volumes(self, adapter=1):
         """
         mfiutil -u 1 show volumes
 
@@ -139,7 +140,6 @@ class Mfiutil():
             print traceback.format_exc()
             raise NameError("Error: create mfi raid.\nRaid: %s"%( type_raid))
 
-        _mfids = set( zip(*self.list_volumes(adapter))[1])
         try:
             _mfids = set( zip(*self.list_volumes(adapter))[1])
         except IndexError:
@@ -174,7 +174,7 @@ class Mfiutil():
             raise NameError("Error: Delete raid %s"%name)
         return 0
 
-    def manager_create_reaid(self, type_raid, pool_disks_number, pool_number = 8):
+    def manager_create_reaid(self, type_raid, pool_disks_number, pool_number = 8, adapter = 1):
         """
         Input:
             type_raid (str):            [raid0 or raid5]
@@ -206,8 +206,6 @@ class Mfiutil():
                     _start   += pool_disks_number
                     _end     += pool_disks_number
                 name_index += pool_number/2
-            return self.list_volumes(1)
-
 
         elif len(disks.keys()) == 1:
             enc_name = disks.keys()[0]
@@ -227,25 +225,70 @@ class Mfiutil():
                     sys.exit(-1)
                 _start   += pool_disks_number
                 _end     += pool_disks_number
-            return self.list_volumes(1)
 
         elif len(disks.keys()) < 1:
             raise NameError("Not enclosere with %s type of disk"%self.type_disk)
         else:
             raise NameError("Alarm no planed variant")
 
-
-    def umount(self, mount_point=["ch0", "ch1", "ch2", "ch3", "ch4", "ch5", "ch6", "ch7"]):
-        """
-
-        """
-        for point in mount_point:
+        name_mfids = dict(self.list_volumes(adapter))
+        for i, name in enumerate(name_mfids.keys()):
+            mount_point = "ch%d"%i
             try:
-               subprocess.check_call(["umount", point])
-            except subprocess.CalledProcessError:
+                self.mount(pool_dev_name = name_mfids[name], mount_point = mount_point)
+            except SystemError:
                 print traceback.format_exc()
-                raise NameError
-        return 1
+                continue
+
+        return self.list_volumes(1)
+
+    def clean_work_pool(self, adapter = 1):
+        """
+        Delete pool ['storage0', ...., 'storage7']
+        """
+        for i in xrange(8):
+            name = "storage%d"%i
+            mount_point = "ch%d"%i
+            try:
+                self.delete_raid(name, adapter)
+            except:
+                print traceback.format_exc()
+            try:
+                self.umount(mount_point)
+            except SystemError:
+                continue
+            except:
+                print traceback.format_exc()
+                sys.exit(-1)
+        return self.list_volumes(adapter)
+
+
+    def umount(self, mount_point):
+        """
+
+        """
+        try:
+           subprocess.check_call(["umount", mount_point])
+        except subprocess.CalledProcessError:
+            print traceback.format_exc()
+            raise SystemError("umount return error")
+        return 0
+
+    def mount(self, pool_dev_name, mount_point):
+        """
+        Input:
+            pool_dev_name (str): name raid in /dev -> "mfid2"
+            mount_point   (str): name on mount point in / -> "ch0"
+        """
+        mount_point = "/%s"%mount_point
+        if not os.path.exists(mount_point):
+            os.mkdir(mount_point)
+        try:
+           subprocess.check_call(["mount", pool_dev_name, mount_point])
+        except subprocess.CalledProcessError:
+            print traceback.format_exc()
+            raise SystemError("mount return error")
+        return 0
 
 
 if __name__ == "__main__":
