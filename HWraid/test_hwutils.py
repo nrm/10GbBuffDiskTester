@@ -103,12 +103,12 @@ class TestMfiutil (unittest.TestCase):
             self.result_list_volumes = self.mfiutil.list_volumes(1)
             self.assertEqual( self.pattern_list_volumes, self.result_list_volumes)
 
-    def testMfiutilCreate_raid(self):
-        """docstring for """
-        with patch('self.list_volumes') as list_volumes:
-            list_volumes.return_value = self.result_list_volumes
-            with patch('subprocess.check_call') as perm_mock:
-                perm_mock.return_value = 0
+    #def testMfiutilCreate_raid(self):
+    #    """docstring for """
+    #    with patch('self.list_volumes') as list_volumes:
+    #        list_volumes.return_value = self.result_list_volumes
+    #        with patch('subprocess.check_call') as perm_mock:
+    #            perm_mock.return_value = 0
 
 
 

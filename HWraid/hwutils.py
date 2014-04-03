@@ -181,15 +181,13 @@ class Mfiutil():
         #получение множества существующих томов ( mfid?? )
         _mfids = dict( self.list_volumes(adapter))
         if not _mfids.has_key(name):
-            #raise NameError("%s volume not exists"%name)
-            return 0
+            return 0 # successful exit
         try:
             cmd = ["mfiutil", "-u%s"%adapter, "delete", _mfids[name]]
             subprocess.check_call(cmd)
         except subprocess.CalledProcessError:
-            print cmd
             print traceback.format_exc()
-            raise NameError("Error: Delete raid %s"%name)
+            raise SystemError("Error: Delete raid %s"%name)
         return 0
 
     def manager_create_raid(self, type_raid, pool_disks_number, pool_number = 8, adapter = 1):
@@ -198,6 +196,9 @@ class Mfiutil():
             type_raid (str):            [raid0 or raid5]
             pool_disks_number (int):    number of disks in each pool
             pool_number (int):          number of pool
+
+        Return:
+            list_volumes (list):        list of tuple [ ( name_pool, mfid), ... (....)]
         """
         disks_numbers = pool_number * pool_disks_number
         disks_dict = self.list_drives(1)
@@ -206,7 +207,7 @@ class Mfiutil():
             for enc_name in disks.keys():
                 enc_disks = disks[enc_name]
                 if disks_numbers/2 > len(enc_disks):
-                    raise NameError("In enclose not enough disks, Need: %s, exists: %s"%(disks_numbers/2, len(enc_disks)))
+                    raise SystemError("In enclose not enough disks, Need: %s, exists: %s"%(disks_numbers/2, len(enc_disks)))
             name_index = 0
             for enc_name in disks.keys():
                 enc_disks = disks[enc_name]
@@ -229,7 +230,7 @@ class Mfiutil():
             enc_name = disks.keys()[0]
             enc_disks = disks[enc_name]
             if disks_numbers > len(enc_disks):
-                raise NameError("In data array not enough disks, Need: %s, exists: %s"%(disks_numbers, len(enc_disks)))
+                raise SystemError("In data array not enough disks, Need: %s, exists: %s"%(disks_numbers, len(enc_disks)))
             disks_address = map(':'.join, zip( [enc_name]*len(enc_disks), enc_disks))
             _start  = 0
             _end    = pool_disks_number
@@ -247,7 +248,7 @@ class Mfiutil():
         elif len(disks.keys()) < 1:
             raise NameError("Not enclosere with %s type of disk"%self.type_disk)
         else:
-            raise NameError("Alarm no planed variant")
+            raise NameError("Unexcpected error")
 
         name_mfids = dict(self.list_volumes(adapter))
         for i, name in enumerate(sorted(name_mfids.keys())):
@@ -260,27 +261,24 @@ class Mfiutil():
 
         return self.list_volumes(1)
 
-    def clean_work_pool(self, adapter = 1):
+    def clean_work_pool(self, pool_number, adapter = 1):
         """
         Delete pool ['storage0', ...., 'storage7']
         """
-        for i in xrange(8):
+        for i in xrange(pool_number):
             name = "storage%d"%i
             mount_point = "ch%d"%i
             try:
                 self.umount(mount_point)
             except SystemError:
                 print traceback.format_exc()
-            except:
-                print traceback.format_exc()
-                sys.exit(-1)
+
             try:
                 self.delete_raid(name, adapter)
-            except:
+            except SystemError:
                 print traceback.format_exc()
                 continue
         return self.list_volumes(adapter)
-
 
     def umount(self, mount_point):
         """
@@ -300,17 +298,20 @@ class Mfiutil():
         """
         Input:
             pool_dev_name (str): name raid in /dev -> "mfid2"
-            mount_point   (str): name on mount point in / -> "ch0"
+            mount_point   (str): name on mount point in "/" -> "ch0"
         """
         mount_point = os.path.join("/", mount_point)
-        if not os.path.exists(mount_point):
-            os.mkdir(mount_point)
-        pool_dev_name = os.path.join("/dev", pool_dev_name)
+        if not os.path.exists(mount_point): os.mkdir(mount_point)
+
+        pool_dev_name = os.path.join("/dev", pool_dev_name, "s1")
+
+        if not os.path.exists(pool_dev_name): raise SystemError("Error:  %s not exists")
+
         try:
-           subprocess.check_call(["mount", pool_dev_name+"s1", mount_point])
+           subprocess.check_call(["mount", pool_dev_name, mount_point])
         except subprocess.CalledProcessError:
-            #print traceback.format_exc()
             raise SystemError("mount return error")
+
         return 0
 
 
