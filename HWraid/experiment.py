@@ -45,7 +45,8 @@ class Experiment(Mfiutil):
         adapter (int):          number of raid controller. default = 1
     """
     def __init__(self, type_disk, pool_number, test_iteration = 60, adapter = 1):
-        super(Experiment, self).__init__(type_disk)
+        #super(Experiment, self).__init__(type_disk)
+        Mfiutil.__init__(type_disk)
         self.type_disk = type_disk
         self.pool_number = pool_number
         self.adapter = adapter
