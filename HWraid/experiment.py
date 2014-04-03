@@ -118,7 +118,8 @@ class Experiment(Mfiutil):
                 try:
                     self.run_dd(path_log, type_raid=type_raid, disk_in_pool = disk_in_pool)
                 except:
-                    ALALAARM #TODO:
+                    print traceback.format_exc()
+                    raise SystemError("Error in run_dd")
 
     def monitor(self, log_path, time_step = 3):
         """
