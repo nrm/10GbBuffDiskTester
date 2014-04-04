@@ -31,7 +31,7 @@ def get_gpt(disknumber):
         P=subprocess.check_output(["gpart", "show", "-l", "%s"%disknumber])
     except:
         print "skip %s disk"%disknumber
-        print traceback.format_exc()
+        #print traceback.format_exc()
         raise NameError('subprocess return error')
         #sys.exit()
     ###dict_gpt-da={} # {"gpt-label":"disk number"}
