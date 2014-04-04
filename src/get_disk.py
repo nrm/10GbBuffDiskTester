@@ -29,10 +29,11 @@ def get_gpt(disknumber):
     """
     try:
         P=subprocess.check_output(["gpart", "show", "-l", "%s"%disknumber])
-    except Exception:
+    except:
         print traceback.format_exc()
-        sys.exit()
-    #dict_gpt-da={} # {"gpt-label":"disk number"}
+        raise NameError('subprocess return error')
+        #sys.exit()
+    ###dict_gpt-da={} # {"gpt-label":"disk number"}
     gpt_label = P.strip().split()[-2]
     if len(gpt_label) >= 3:
         return P.strip().split()[-2]
