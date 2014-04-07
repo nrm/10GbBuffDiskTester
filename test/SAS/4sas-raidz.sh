@@ -1,7 +1,7 @@
 #!/bin/bash
 #################################################################
-# Тестируем SAS диски, конкретно zfs raidz pool из 5 дисков    #
-# Name_file: 5sas-raidz.sh                                      #
+# Тестируем NSAS диски, конкретно zfs stripe pool из 3 дисков   #
+# Name_file: 3sas-stripe.sh                                     #
 #  Утилитой dd                                                  #
 #    $NUM сканов по 10GB                                        #
 #    пишем лог top и zpool iostat                               #
@@ -9,7 +9,7 @@
 
 NUM=$1
 IFPOOL=$2
-POOL_DISK=5
+POOL_DISK=4
 POOL_TYPE="raidz"
 DISK_TYPE="sas"
 
