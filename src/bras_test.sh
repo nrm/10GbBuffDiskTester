@@ -14,6 +14,7 @@ ZPOOL=${BASE_PATH}/../zfs/${DISK_TYPE}/${POOL_DISK}d${POOL_TYPE}.sh
 ZIOSTAT=${BASE_PATH}/ziostat.sh
 GPT_DISK=${BASE_PATH}/get_disk.py
 IOSTAT=${BASE_PATH}/iostat.py
+CAPTURE=${BASE_PATH}/../../BRAS/8cpu-test-pkt-8238
 
 LOG_PATH=${BASE_PATH}/../Log/BRAS
 CWD=${LOG_PATH}/`date +"%d-%m-%y"`/${POOL_DISK}D${POOL_TYPE}${DISK_TYPE}/`date +%H:%M`
@@ -23,6 +24,7 @@ TOP_LOG=${CWD}/Top-${NUM}scan-${POOL_DISK}D${POOL_TYPE}${DISK_TYPE}-bras-10GB.lo
 ZIOSTAT_LOG=${CWD}/Ziostat-${NUM}scan-${POOL_DISK}D${POOL_TYPE}${DISK_TYPE}-bras-10GB.log
 IOSTAT_LOG=${CWD}/Iostat-${NUM}scan-${POOL_DISK}D${POOL_TYPE}${DISK_TYPE}-bras-10GB.log
 SCAN_LOG=${CWD}/Result-${NUM}scan-${POOL_TYPE}-${POOL_DISK}-${DISK_TYPE}-bras-10GB.log
+CAPTURE_LOG=${CWD}/Netmap-${NUM}scan-${POOL_TYPE}-${POOL_DISK}-${DISK_TYPE}.log
 
 # Test Init
 #mkdir ${BASE_PATH}
@@ -52,6 +54,10 @@ fi
 #SEC=$((${NUM}*(40+20)/3))
 #zpool iostat 3 ${SEC} > ${IOSTAT_LOG}
 /bin/bash ${ZIOSTAT} ${ZIOSTAT_LOG} ${NUM}
+
+#Start Netmap
+
+${CAPTURE} > ${CAPTURE_LOG} 2>&1 &
 
 # Start bras
 #/bin/bash ${BRAS} ${BRAS_LOG} ${NUM} &
