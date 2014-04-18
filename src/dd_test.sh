@@ -7,7 +7,6 @@ DISK_TYPE=$4
 BASE_PATH=$5
 IFPOOL=$6
 
-
 DD=${BASE_PATH}/dd_tester.sh
 TOP=${BASE_PATH}/top_loop_60scan.sh
 ZPOOL=${BASE_PATH}/../zfs/${DISK_TYPE}/${POOL_DISK}d${POOL_TYPE}.sh
@@ -32,7 +31,6 @@ mkdir -p ${CWD}
 #compared gpt_labels and disk address
 /usr/local/bin/python ${GPT_DISK}
 
-
 # Create zpool
 if (( IFPOOL == 1))
 then
@@ -43,7 +41,6 @@ fi
 
 #Start native iostat
 /usr/local/bin/python ${IOSTAT} -l ${IOSTAT_LOG} -c $NUM -t 3
-
 
 # Start write top cpu statistic to log file
 /bin/bash ${TOP} ${TOP_LOG} ${NUM}

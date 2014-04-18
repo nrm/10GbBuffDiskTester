@@ -44,6 +44,9 @@ fi
 # Start write top cpu statistic to log file
 /bin/bash ${TOP} ${TOP_LOG} ${NUM}
 
+#Start Netmap
+8cpu-test-pkt-8238
+
 # Start CPC Control
 /bin/sleep 10
 ${CPC} > ${CPC_LOG} 2>&1 &

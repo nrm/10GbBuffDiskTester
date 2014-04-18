@@ -1,10 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-~Pнализ лог ~Dайла zpool iostat
+Parsing native iostat log file
 
-~^~Aновн~Kе возможно~A~Bи:
-    в~Kдаем min, aver, max ~Aко~@о~A~Bи запи~Aи на п~Cл
+Structure iostat log file:
+{{{
+        extended device statistics
+    device     r/s   w/s    kr/s    kw/s qlen svc_t  %b
+    da1        0.0 158.3     0.0 20106.1    1   6.5 100
+    da2        0.0 186.6     0.0 23642.3    1   5.5  99
+    da3        0.0 178.6     0.0 22861.7    1   5.7 100
+}}}
+where:
+    r/s   : read operations per second
+    w/s   : write operations per	second
+    kr/s  : kilobytes read per second
+    kw/s  : kilobytes write per second
+    qlen  : transactions queue length
+    svc_t : average duration of transactions, in milliseconds
+    %b    : % of time the device had one or more outstanding transactions
 
 """
 
